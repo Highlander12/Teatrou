@@ -1,4 +1,4 @@
-package br.com.teatrou.compra.model;
+package br.com.teatrou.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import br.com.teatrou.usuario.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

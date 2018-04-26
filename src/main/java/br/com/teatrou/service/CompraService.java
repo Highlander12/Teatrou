@@ -1,9 +1,9 @@
-package br.com.teatrou.compra.service;
+package br.com.teatrou.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.teatrou.compra.repository.CompraRepository;
+import br.com.teatrou.repository.CompraRepository;
 
 @Service
 public class CompraService {

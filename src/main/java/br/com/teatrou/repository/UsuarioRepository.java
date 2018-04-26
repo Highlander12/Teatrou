@@ -1,9 +1,9 @@
-package br.com.teatrou.usuario.repository;
+package br.com.teatrou.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.teatrou.usuario.model.Usuario;
+import br.com.teatrou.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
