@@ -1,4 +1,4 @@
-package br.com.teatrou.ingresso.model;
+package br.com.teatrou.model.enums;
 
 public enum FaixaEtariaEnum {
 	
