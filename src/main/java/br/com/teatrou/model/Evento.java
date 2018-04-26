@@ -1,19 +1,22 @@
-package br.com.teatrou.evento.model;
+package br.com.teatrou.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import br.com.teatrou.usuario.model.Usuario;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -21,6 +24,7 @@ import lombok.NoArgsConstructor;
 public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Evento {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
 	@NotNull(message = "Codigo do usuario é obrigatorio.")
@@ -54,6 +58,9 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Eve
 
 	@NotNull
 	private BigDecimal valorIngresso;
+	
+	@NotNull
+	private @Getter(AccessLevel.NONE) Boolean ativo;
 	
 	
 }
