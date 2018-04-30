@@ -1,4 +1,4 @@
-package br.com.teatrou.config.token;
+package br.com.teatrou.token;
 
 import java.util.HashMap;
 import java.util.Map;
