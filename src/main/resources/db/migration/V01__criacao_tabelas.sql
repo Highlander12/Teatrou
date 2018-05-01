@@ -20,6 +20,7 @@ CREATE TABLE evento (
    endereco VARCHAR(255),
    quantidade_ingresso INT NOT NULL,
    valor_ingresso BIGDECIMAL(10,2) NOT NULL,
+   ativo BOOLEAN NOT NULL,
    FOREIGN KEY (codigo_usuario) REFERENCES usuario(codigo),
    FOREIGN KEY (codigo_ingresso) REFERENCES ingresso(codigo)
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -30,6 +31,7 @@ CREATE TABLE evento (
    codigo_evento BIGINT(20),
    codigo_compra BIGINT(20),
    faixa_etaria VARCHAR(20) NOT NULL,
+   ativo BOOLEAN NOT NULL,
    FOREIGN KEY (codigo_evento) REFERENCES evento(codigo),
    FOREIGN KEY (codigo_compra) REFERENCES compra(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

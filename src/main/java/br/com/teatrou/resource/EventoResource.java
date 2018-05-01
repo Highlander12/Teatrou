@@ -34,7 +34,7 @@ public class EventoResource {
 	private EventoRepository eventoRepository;
 
 	@GetMapping
-	public ResponseEntity<Page<Evento>> listar(EventoFilter eventoFilter, Pageable pageable) {
+	public ResponseEntity<Page<Evento>> filtrar(EventoFilter eventoFilter, Pageable pageable) {
 		return new ResponseEntity<>(eventoRepository.filtrar(eventoFilter, pageable), HttpStatus.OK);
 	}
 
@@ -62,13 +62,13 @@ public class EventoResource {
 	}
 
 	@PutMapping("/{codigo}/data-pagamento")
-	public ResponseEntity<Evento> alterarDataPagamento(@PathVariable(required = true) Long codigo,
+	public ResponseEntity<Evento> alterarDataEvento(@PathVariable(required = true) Long codigo,
 			@RequestBody LocalDate dataEvento) {
 		return new ResponseEntity<>(eventoService.atualizarDataEvento(codigo, dataEvento), HttpStatus.OK);
 	}
 
 	@PutMapping("/{codigo}/ativar")
-	public ResponseEntity<Evento> alterarDataPagamento(@PathVariable(required = true) Long codigo) {
+	public ResponseEntity<Evento> ativarEvento(@PathVariable(required = true) Long codigo) {
 		return new ResponseEntity<>(eventoService.ativarEvento(codigo), HttpStatus.OK);
 	}
 

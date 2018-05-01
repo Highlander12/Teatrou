@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,20 +23,16 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class  Co
 	@Id
 	private Long codigo;
 	
-    @NotNull(message = "Codigo da usuario é obrigatorio.")
 	@ManyToOne
 	@JoinColumn(name = "codigo_usuario")
 	private Usuario usuario;
 	
-	@NotNull
 	@Column(name = "quantidade_ingresso")
 	private Integer quantidadeIngresso;
 	
-	@NotNull
 	@Column(name = "data_compra")
 	private LocalDate dataCompra;
 	
-	@NotNull
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	

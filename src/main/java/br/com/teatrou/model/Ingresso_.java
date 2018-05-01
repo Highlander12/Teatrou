@@ -12,6 +12,7 @@ public abstract class Ingresso_ {
 	public static volatile SingularAttribute<Ingresso, Compra> compra;
 	public static volatile SingularAttribute<Ingresso, Long> codigo;
 	public static volatile SingularAttribute<Ingresso, Evento> evento;
+	public static volatile SingularAttribute<Ingresso, Boolean> ativo;
 	public static volatile SingularAttribute<Ingresso, FaixaEtariaEnum> faixaEtaria;
 
 }

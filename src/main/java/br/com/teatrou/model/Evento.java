@@ -3,6 +3,7 @@ package br.com.teatrou.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,12 +40,15 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Eve
 	private String descricao;
 	
 	@NotNull
+	@Column(name = "data_evento")
 	private LocalDate dataEvento;
 	
 	@NotNull
+	@Column(name = "hora_inicial")
 	private String horaInicial;
 	
 	@NotNull
+	@Column(name = "hora_final")
 	private String horaFinal;
 	
 	@NotNull
@@ -54,9 +58,11 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Eve
 	private String endereco;
 	
 	@NotNull
+	@Column(name = "quantidade_ingresso")
 	private Integer quantidadeIngresso;
 
 	@NotNull
+	@Column(name = "valor_ingresso")
 	private BigDecimal valorIngresso;
 	
 	@NotNull

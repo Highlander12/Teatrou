@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.teatrou.model.Compra;
@@ -32,24 +34,39 @@ public class CompraService {
 	@Autowired
 	private AuthenticationHelper authenticationHelper;
 
+	private Integer quantidadeTotalIngressos;
+
 	public Compra comprar(CompraDTO compraDTO) {
 		Usuario usuario = authenticationHelper.getUsuario();
 		Compra compra = new Compra();
+
 		compra.setQuantidadeIngresso(compraDTO.getIngressosInteira() + compraDTO.getIngressosMeia());
 		compra.setUsuario(usuario);
 		compra.setDataCompra(LocalDate.now());
 		Evento evento = eventoRepository.findByUsuario(usuario);
-		Double valorTotal = (compraDTO.getIngressosInteira() * evento.getValorIngresso().doubleValue())
-				+ (compraDTO.getIngressosMeia() * (evento.getValorIngresso().doubleValue() / 2));
+		Double valorTotal = getValorTotal(compraDTO, evento);
 		compra.setValorTotal(BigDecimal.valueOf(valorTotal));
 		Compra compraSave = compraRepository.save(compra);
 
-		Integer loop = compraDTO.getIngressosInteira().intValue();
-		Integer quantidadeTotalIngressos = evento.getQuantidadeIngresso();
-		for (int i = 0; i < loop; i++) {
-          ingressoRepository.save(criaIngresso(compraSave, evento, FaixaEtariaEnum.INTEIRA));
+		quantidadeTotalIngressos = evento.getQuantidadeIngresso();
+		salvarIngresso(evento, compraSave, compraDTO.getIngressosInteira().intValue(), FaixaEtariaEnum.INTEIRA);
+		salvarIngresso(evento, compraSave, compraDTO.getIngressosMeia().intValue(), FaixaEtariaEnum.MEIA);
+
+		return compra;
+	}
+
+	private void salvarIngresso(Evento evento, Compra compraSave, Integer quantidade, FaixaEtariaEnum faixaEtariaEnum) {
+		if (quantidadeTotalIngressos > quantidade) {
+			for (int i = 0; i < quantidade; i++) {
+				ingressoRepository.save(criaIngresso(compraSave, evento, faixaEtariaEnum));
+				quantidadeTotalIngressos--;
+			}
 		}
-		return null;
+	}
+
+	private double getValorTotal(CompraDTO compraDTO, Evento evento) {
+		return (compraDTO.getIngressosInteira() * evento.getValorIngresso().doubleValue())
+				+ (compraDTO.getIngressosMeia() * (evento.getValorIngresso().doubleValue() / 2));
 	}
 
 	private Ingresso criaIngresso(Compra compra, Evento evento, FaixaEtariaEnum faixaEtariaEnum) {
@@ -59,5 +76,11 @@ public class CompraService {
 		ingresso.setEvento(evento);
 		return ingresso;
 	}
+
+	public Page<Compra> buscarCompras(Pageable pageable) {
+		Usuario usuario = authenticationHelper.getUsuario();
+		return compraRepository.findByUsuario(usuario, pageable);
+	}
+
 
 }
