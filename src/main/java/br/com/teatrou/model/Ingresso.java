@@ -33,7 +33,7 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ing
 	private Evento evento;
 	
 	@ManyToOne
-	@JoinColumn(name = "codigo_evento")
+	@JoinColumn(name = "codigo_compra")
 	private Compra compra;
 
 	@Enumerated(EnumType.STRING)

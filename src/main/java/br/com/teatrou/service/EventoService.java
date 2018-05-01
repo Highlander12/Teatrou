@@ -1,12 +1,13 @@
 package br.com.teatrou.service;
 
-import java.awt.print.Pageable;
+
 import java.time.LocalDate;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.teatrou.model.Evento;
