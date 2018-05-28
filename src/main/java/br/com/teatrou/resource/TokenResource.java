@@ -14,7 +14,7 @@ import br.com.teatrou.config.property.TeatrouApiProperty;
 
 @RestController
 @RequestMapping(value = "/tokens")
-public class TokenController {
+public class TokenResource {
 	
 	@Autowired
 	private TeatrouApiProperty teatrouApiProperty;

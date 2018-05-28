@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.teatrou.model.Usuario;
@@ -30,6 +31,7 @@ public class UsuarioService {
 	}
 	
 	public Usuario salvar(Usuario usuario) {
+		usuario.setSenha(enconder(usuario.getSenha()));
 		return usuarioRepository.save(usuario);
 	}
 	
@@ -37,5 +39,10 @@ public class UsuarioService {
 		Usuario usuarioSalvo = findByCodigo(codigo);
 		BeanUtils.copyProperties(usuario, usuarioSalvo, "codigo");
 		return salvar(usuario);
+	}
+	
+	public String enconder (String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.encode(senha);
 	}
 }

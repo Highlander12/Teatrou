@@ -33,11 +33,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
@@ -49,6 +44,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.stateless(true);
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
