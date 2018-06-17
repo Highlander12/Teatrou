@@ -23,7 +23,7 @@ import br.com.teatrou.config.property.TeatrouApiProperty;
 public class CorsFilter implements Filter {
 
 	@Autowired
-	private TeatrouApiProperty teatrouApiProperty;
+	private TeatrouApiProperty property;
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -32,9 +32,9 @@ public class CorsFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		
-		response.setHeader("Access-Control-Allow-Origin", teatrouApiProperty.getOriginPermitida() ); //TODO :configurar para diferentes ambientes
+		response.setHeader("Access-Control-Allow-Origin", property.getOriginPermitida() ); //TODO :configurar para diferentes ambientes
 		response.setHeader("Access-Control-Allow-Credentials", "true");
-		if("OPTIONS".equals(request.getMethod()) && teatrouApiProperty.getOriginPermitida().equals(request.getHeader("Origin"))){
+		if("OPTIONS".equals(request.getMethod()) && property.getOriginPermitida().equals(request.getHeader("Origin"))){
 			response.setHeader("Access-Control-Allow-Methods", "POST , GET , DELETE, PUT, OPTIONS");
 			response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
 			response.setHeader("Access-Control-Allow-Max-Age", "3600");
