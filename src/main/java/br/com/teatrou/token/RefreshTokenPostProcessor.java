@@ -26,7 +26,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 	public static final String POST_ACCESS_TOKEN = "postAccessToken";
 	
 	@Autowired
-	private TeatrouApiProperty teatrouApiProperty;
+	private TeatrouApiProperty property;
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -58,7 +58,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 		Cookie requestTokenCookie = new Cookie("RefreshToken", refreshToken);
 		
 		requestTokenCookie.setHttpOnly(true);
-		requestTokenCookie.setSecure(teatrouApiProperty.getSeguranca().isEnableHttps());
+		requestTokenCookie.setSecure(property.getSeguranca().isEnableHttps());
 		requestTokenCookie.setPath(request.getContextPath() + "/oauth/token");
 		requestTokenCookie.setMaxAge(3600 * 24 * 30);
 		response.addCookie(requestTokenCookie);

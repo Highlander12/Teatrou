@@ -1,0 +1,1 @@
+ALTER TABLE evento ADD COLUMN anexo VARCHAR(200);

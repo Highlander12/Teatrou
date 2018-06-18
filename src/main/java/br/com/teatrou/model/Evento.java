@@ -10,9 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.util.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.teatrou.storage.S3;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +31,10 @@ import lombok.NoArgsConstructor;
 @Table(name= "evento")
 public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Evento {
 	
+	@JsonIgnore
+	@Transient
+	public static S3 s3;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
@@ -32,6 +43,11 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Eve
 	@ManyToOne
 	@JoinColumn(name = "codigo_usuario")
 	private Usuario usuario;
+	
+	private String anexo;
+	
+	@Transient
+	private String urlAnexo;
 	
 	@NotNull
 	private String titulo;
@@ -68,5 +84,12 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Eve
 	@NotNull
 	private @Getter(AccessLevel.NONE) Boolean ativo;
 	
+	
+	@PostLoad
+	public void postLoad() {
+		if(StringUtils.hasText(this.getAnexo())) {
+			setUrlAnexo(s3.configurarUrl(this.getAnexo()));
+		}
+	}
 	
 }

@@ -17,12 +17,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import br.com.teatrou.model.Anexo;
 import br.com.teatrou.model.Evento;
 import br.com.teatrou.repository.EventoRepository;
 import br.com.teatrou.repository.filter.EventoFilter;
 import br.com.teatrou.service.EventoService;
+import br.com.teatrou.storage.S3;
 
 @RestController
 @RequestMapping(value = "/evento")
@@ -33,7 +37,18 @@ public class EventoResource {
 
 	@Autowired
 	private EventoRepository eventoRepository;
+	
+	@Autowired
+	private S3 s3;
 
+	@PostMapping("/image")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_EVENTO')")
+	public Anexo uploadImage(@RequestParam MultipartFile arquivo) {
+		String nome =  s3.salvarTemporariamente(arquivo);
+		return new Anexo(nome, s3.configurarUrl(nome));
+	}
+	
+	
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_EVENTO')")
 	public ResponseEntity<Page<Evento>> filtrar(EventoFilter eventoFilter, Pageable pageable) {
