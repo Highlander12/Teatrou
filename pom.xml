@@ -138,8 +138,6 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		
-		<!-- PagSeguro -->
-		
 		<!-- Amazon s3 -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>

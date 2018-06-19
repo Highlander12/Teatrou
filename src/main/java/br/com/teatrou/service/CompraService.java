@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.teatrou.exception.CompraInexistenteException;
+import br.com.teatrou.exception.IngressoInexistenteException;
 import br.com.teatrou.exception.UsuarioInexistenteOuDeslogadoException;
 import br.com.teatrou.model.Compra;
 import br.com.teatrou.model.Evento;
@@ -20,6 +22,7 @@ import br.com.teatrou.repository.CompraRepository;
 import br.com.teatrou.repository.EventoRepository;
 import br.com.teatrou.repository.IngressoRepository;
 import br.com.teatrou.token.AuthenticationHelper;
+import net.sf.jasperreports.engine.xml.JRExpressionFactory.IntegerExpressionFactory;
 
 @Service
 public class CompraService {
@@ -38,7 +41,7 @@ public class CompraService {
 
 	private Integer quantidadeTotalIngressos;
 
-	public Compra registrarCompraPendente(CompraDTO compraDTO) {
+	public Compra registrarCompraPendente(CompraDTO compraDTO, String codigo) {
 		Usuario usuario = authenticationHelper.getUsuario();
 		if(usuario == null) 
 			throw new UsuarioInexistenteOuDeslogadoException();
@@ -47,6 +50,7 @@ public class CompraService {
 		compra.setQuantidadeIngresso(compraDTO.getIngressosInteira() + compraDTO.getIngressosMeia());
 		compra.setUsuario(usuario);
 		compra.setDataCompra(LocalDate.now());
+		compra.setCodigo(Long.parseLong(codigo));
 		
 		Evento evento = eventoRepository.findByUsuario(usuario);
 		Double valorTotal = getValorTotal(compraDTO, evento);
@@ -87,6 +91,25 @@ public class CompraService {
 	public Page<Compra> buscarCompras(Pageable pageable) {
 		Usuario usuario = authenticationHelper.getUsuario();
 		return compraRepository.findByUsuario(usuario, pageable);
+	}
+	
+	public void alteraCompra(Long codigo, SituacaoEnum situacaoEnum ) {
+		Compra compra = compraRepository.findOne(codigo);
+		if( compra == null) 
+			throw new CompraInexistenteException();
+		compra.setSituacao(situacaoEnum);
+		
+		compraRepository.save(compra);
+	}
+	
+	public void alteraIngresso(Long codigo, SituacaoEnum situacaoEnum ) {
+		Ingresso ingresso = ingressoRepository.findOne(codigo);
+		if( ingresso == null) 
+			throw new IngressoInexistenteException();
+		
+		ingresso.setSituacao(situacaoEnum);
+		
+		ingressoRepository.save(ingresso);
 	}
 
 
