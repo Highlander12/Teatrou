@@ -30,11 +30,11 @@ public class CompraResource {
 	@Autowired
 	private CompraRepository compraRepository;
 
-	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_REALIZAR_COMPRA')")
-	public ResponseEntity<Compra> comprar(@Valid @RequestBody CompraDTO compra) {
-		return new ResponseEntity<>(compraService.comprar(compra), HttpStatus.CREATED);
-	}
+//	@PostMapping
+//	@PreAuthorize("hasAuthority('ROLE_REALIZAR_COMPRA')")
+//	public ResponseEntity<Compra> comprar(@Valid @RequestBody CompraDTO compra) {
+//		return new ResponseEntity<>(compraService.comprar(compra), HttpStatus.CREATED);
+//	}
 
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_COMPRA')")

@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import br.com.teatrou.model.enums.FaixaEtariaEnum;
+import br.com.teatrou.model.enums.SituacaoEnum;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +40,10 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ing
 	@Enumerated(EnumType.STRING)
 	@Column(name = "faixa_etaria")
 	private FaixaEtariaEnum faixaEtaria;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "situacao")
+	private SituacaoEnum situacao;
 
 	@NotNull
 	private @Getter(AccessLevel.NONE) Boolean ativo;

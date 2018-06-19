@@ -85,13 +85,7 @@
 			<artifactId>hibernate-jpamodelgen</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- PagSeguro -->
-		<dependency>
-			<groupId>br.com.uol.pagseguro</groupId>
-			<artifactId>pagseguro-api</artifactId>
-			<version>4.1.1</version>
-		</dependency>
+
 
 		<!-- mysql -->
 		<dependency>
@@ -145,11 +139,6 @@
 		</dependency>
 		
 		<!-- PagSeguro -->
-		<dependency>
-			<groupId>br.com.uol.pagseguro</groupId>
-			<artifactId>pagseguro-api</artifactId>
-			<version>4.1.1</version>
-		</dependency>
 		
 		<!-- Amazon s3 -->
 		<dependency>
