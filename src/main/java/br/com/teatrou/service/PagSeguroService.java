@@ -1,5 +1,6 @@
 package br.com.teatrou.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -52,7 +53,7 @@ public class PagSeguroService {
 			request.setReference(gerarIdUnico(compraDTO));
 			request.setCurrency(Currency.BRL);
 			request.setSender(getSender());
-			adicionarItems(compraDTO, request);
+			request.setItems(gerarItems(compraDTO));
 			request.setNotificationURL(property.getOriginPermitida() + "/pag-seguro/notificacao");
 			request.setRedirectURL(property.getOriginPermitida() + "/compra/pagamento-finalizado");
 			
@@ -66,25 +67,28 @@ public class PagSeguroService {
 
 
 
-	private void adicionarItems(CompraDTO compraDTO, PaymentRequest request) {
+	private List<Item> gerarItems(CompraDTO compraDTO) {
 		Compra compra = compraService.registrarCompraPendente(compraDTO);
 		List<Ingresso> ingressosInteira = ingressoRepository.findByCompraAndFaixaEtaria(compra, FaixaEtariaEnum.INTEIRA);
 		List<Ingresso> ingressosMeia = ingressoRepository.findByCompraAndFaixaEtaria(compra, FaixaEtariaEnum.MEIA);
 		
-		Item item = criarItem(ingressosInteira);
+		List<Item> items = new ArrayList<Item>();
+		
+		ingressosInteira.forEach(ingressoInteira -> items.add(criarItem(ingressoInteira)));
+		ingressosMeia.forEach(ingressoMeia -> items.add(criarItem(ingressoMeia)));
+		
+		return items;
 	}
 
 
 
-	private Item criarItem(List<Ingresso> ingressos) {
-		
+	private Item criarItem(Ingresso ingresso) {
 		Item item = new Item();
-		item.setDescription("INGRESSO EVENTO - " + ingressos.get(0).getFaixaEtaria() +
-							" - EVENTO " + ingressos.get(0).getEvento().getTitulo());
-		item.setQuantity(ingressos.size());
-	    
-		
-		return null;
+		item.setId(ingresso.getCodigo().toString());
+		item.setDescription("INGRESSO EVENTO - " + ingresso.getFaixaEtaria() +" - EVENTO " + ingresso.getEvento().getTitulo());
+		item.setQuantity(1);
+	    item.setAmount(ingresso.getEvento().getValorIngresso());
+		return item;
 	}
 
 
