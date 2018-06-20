@@ -21,11 +21,26 @@ public class PagSeguroResource {
 	@Autowired
 	private PagSeguroService pagSeguroService;
 
+
+	/**
+	 * <p>
+	 * Método que cria uma transação e gera um link onde o usuario realizara o pagamento.
+	 * @param compra
+	 * @return link da transação para pagto.
+	 */
 	@PostMapping(value = "/pagamento", produces = "application/json")
 	public ResponseEntity<String> geraLinkPagamento(@Valid @RequestBody CompraDTO compra) {
 		return new ResponseEntity<>(pagSeguroService.criarPagamento(compra), HttpStatus.OK);
 	}
 
+	/**
+	 * <p> 
+	 *  Método que escuta as notificações das transações criadas.
+	 * </p>
+	 * @param nCode objeto padrão do PagSeguro não alterar
+	 * @param nType objeto padrão do PagSeguro não alterar
+	 * @return {@link verificaStatus}.
+	 */
 	@PostMapping(value = "/notificacao")
 	public ResponseEntity<String> registrarNotificacao(
 			@RequestParam(value = "notificationCode") String nCode,

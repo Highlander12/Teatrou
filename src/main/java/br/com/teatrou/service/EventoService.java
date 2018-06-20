@@ -34,10 +34,27 @@ public class EventoService {
 	@Autowired
 	private AuthenticationHelper authenticationHelper;
 
+	
+	/**
+	 * <p>
+	 *  Método que lista todos eventos
+	 * </p>
+	 * @param pageable
+	 * @return eventos
+	 */
 	public Page<Evento> listar(Pageable pageable) {
 		return eventoRepository.findAll(pageable);
 	}
 
+	
+	/** 
+	 * <p>
+	 * Método que salva um evento, e remove a regra de exclusão do anexo na amazon caso o anexo no {@link evento } 
+	 * passado na assinatura o método seja valido.
+	 * </p>
+	 * @param evento
+	 * @return evento criado
+	 */
 	public Evento salvar(Evento evento) {
 
 		Usuario usuario = authenticationHelper.getUsuario();
@@ -52,6 +69,12 @@ public class EventoService {
 		return eventoRepository.save(evento);
 	}
 
+	/** 
+	 * <p>
+	 * Método que valida se o usuário esta deslogado ou e inexistente
+	 * </p>
+	 * @param evento
+	 */
 	private void validUsuario(Evento evento) {
 		Usuario usuario = null;
 		Long codigo = authenticationHelper.getUsuario().getCodigo();
@@ -63,6 +86,14 @@ public class EventoService {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Método que atualiza um evento, remove o anexo ou substitui dependendo da estado do evento.
+	 * </p>
+	 * @param codigo
+	 * @param evento
+	 * @return evento atualizado
+	 */
 	public Evento atualizar(Long codigo, Evento evento) {
 		Evento eventoSalvo = BuscaPeloCodigo(codigo);
 		if (!evento.getUsuario().equals(eventoSalvo.getUsuario())) {
@@ -82,6 +113,12 @@ public class EventoService {
 		return salvar(eventoSalvo);
 	}
 
+	
+	/**
+	 * 
+	 * @param codigo
+	 * @return evento específico
+	 */
 	private Evento BuscaPeloCodigo(Long codigo) {
 		Evento eventoSalvo = eventoRepository.findOne(codigo);
 		if (eventoSalvo == null) {
@@ -90,24 +127,55 @@ public class EventoService {
 		return eventoSalvo;
 	}
 
+	
+	/**
+	 * <p>
+	 * Método que atualiza a data de um evento
+	 * </p>
+	 * @param codigo
+	 * @param dataEvento
+	 * @return
+	 */
 	public Evento atualizarDataEvento(Long codigo, LocalDate dataEvento) {
 		Evento eventoSalvo = BuscaPeloCodigo(codigo);
 		eventoSalvo.setDataEvento(dataEvento);
 		return salvar(eventoSalvo);
 	}
 
+	/**
+	 * <p>
+	 * Método que ativa um evento
+	 * </p>
+	 * @param codigo
+	 * @return evento ativado
+	 */
 	public Evento ativarEvento(Long codigo) {
 		Evento eventoSalvo = BuscaPeloCodigo(codigo);
 		eventoSalvo.setAtivo(true);
 		return salvar(eventoSalvo);
 	}
 
+	/**
+	 * <p>
+	 * Método que atualiza uma descrição
+	 * </p>
+	 * @param codigo
+	 * @param descricao
+	 * @return evento atualizado
+	 */
 	public Evento atualizarDescricao(Long codigo, String descricao) {
 		Evento eventoSalvo = BuscaPeloCodigo(codigo);
 		eventoSalvo.setDescricao(descricao);
 		return salvar(eventoSalvo);
 	}
 
+	/**
+	 * <p>
+	 * Método que retoma os ingresso salvos, que o pagamento foi cancelado, disponibilizando a compra deles
+	 *  novamente.
+	 * </p>
+	 * @param codigo
+	 */
 	public void retomaIngresso(String codigo) {
 		Evento evento = BuscaPeloCodigo(Long.parseLong(codigo));
 		if(evento == null) 

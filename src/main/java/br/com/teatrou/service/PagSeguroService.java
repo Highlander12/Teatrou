@@ -128,8 +128,9 @@ public class PagSeguroService {
 	 * retoma a quantidade de ingressos para o Evento, deixando disponivel novamente a quantidade, que antes 
 	 * estava no carinho.
 	 * </p>
-	 * @param transaction
-	 * @param situacao
+	 * 
+	 * @param transaction transação de pagamento
+	 * @param situacao da compra
 	 */
 	private void registrarStatus(Transaction transaction, SituacaoEnum situacao) {
 		// Muda o status da compra
@@ -153,20 +154,43 @@ public class PagSeguroService {
 		}
 	}
 
+	
+	/**
+	 * <p> Método que gera a compra pendente, no sistema representando pelo método {@link registrarCompraPendente}
+	 * do service de compra, e transforma os ingressos em objetos padrões do PagSeguro, representado pela classe
+	 * {@link Item}.
+	 * </p>
+	 * 
+	 * @param compraDTO objeto que representa a compra, onde o possui o codigo do evento e a quantidade
+	 * de ingresso, pois o usuario e pego pela classe {@link AuthenticationHelper } deis que ele esteja 
+	 * logado e o projeto esteja no perfil de Produção.
+	 * @param chave id unico 
+	 * @return ingressos no formato padrão do PagSeguro
+	 */
 	private List<Item> gerarItems(CompraDTO compraDTO, String chave) {
+		
+		// Registro da compra e ingressos
 		Compra compra = compraService.registrarCompraPendente(compraDTO, chave);
-		List<Ingresso> ingressosInteira = ingressoRepository.findByCompraAndFaixaEtaria(compra,
-				FaixaEtariaEnum.INTEIRA);
+		
+		List<Ingresso> ingressosInteira = ingressoRepository.findByCompraAndFaixaEtaria(compra, FaixaEtariaEnum.INTEIRA);
 		List<Ingresso> ingressosMeia = ingressoRepository.findByCompraAndFaixaEtaria(compra, FaixaEtariaEnum.MEIA);
 
 		List<Item> items = new ArrayList<Item>();
-
+        
+		// Adicionando os items/ingressos
 		ingressosInteira.forEach(ingressoInteira -> items.add(criarItem(ingressoInteira)));
 		ingressosMeia.forEach(ingressoMeia -> items.add(criarItem(ingressoMeia)));
 
 		return items;
 	}
 
+	/** 
+	 * <p>
+	 *   Método que cria um item baseado no ingresso.
+	 * </p>
+	 * @param ingresso a ser transformado
+	 * @return ingresso no formato padrão do PagSeguro
+	 */
 	private Item criarItem(Ingresso ingresso) {
 		Item item = new Item();
 		item.setId(ingresso.getCodigo().toString());
@@ -177,6 +201,12 @@ public class PagSeguroService {
 		return item;
 	}
 
+	/**
+	 * <p>
+	 *   Método que cria o comprador da transação
+	 * </p>
+	 * @return comprador
+	 */
 	private Sender getSender() {
 		Usuario usuario = authenticationHelper.getUsuario();
 		if (usuario == null)
@@ -184,10 +214,22 @@ public class PagSeguroService {
 		return new Sender(usuario.getEmail(), usuario.getNome());
 	}
 
+	
+	/**
+	 * 
+	 * @param compraDTO
+	 * @return Id unico
+	 */
 	private String gerarIdUnico(CompraDTO compraDTO) {
 		return UUID.randomUUID().toString() + "_" + compraDTO.getCodigoEvento();
 	}
 
+	
+	/**
+	 * 
+	 * @return credentiais do Vendedor
+	 * @throws PagSeguroServiceException
+	 */
 	private Credentials getCredentials() throws PagSeguroServiceException {
 		return new AccountCredentials(property.getPagSeguro().getEmail(), property.getPagSeguro().getToken());
 	}

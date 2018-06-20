@@ -19,6 +19,14 @@ public class TokenResource {
 	@Autowired
 	private TeatrouApiProperty teatrouApiProperty;
 	
+	
+	/**
+	 * <p>
+	 *  Invalida o token do usuario, Logout
+	 * </p>
+	 * @param req
+	 * @param resp
+	 */
 	@DeleteMapping("/revoke")
 	public void revoke(HttpServletRequest req, HttpServletResponse resp){
 		Cookie cookie = new Cookie("refreshToken", null);

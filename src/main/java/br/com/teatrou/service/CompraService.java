@@ -41,23 +41,34 @@ public class CompraService {
 
 	private Integer quantidadeTotalIngressos;
 
-	public Compra registrarCompraPendente(CompraDTO compraDTO, String codigo) {
+	/**
+	 * <p>
+	 *  Método que registra a compra como pendente, reservando os ingressos até que o pagamento seja aprovado,
+	 *  ou cancelado.
+	 * </p>
+	 * @param compraDTO
+	 * @param chaveUnica
+	 * @return compra 
+	 */
+	public Compra registrarCompraPendente(CompraDTO compraDTO, String chaveUnica) {
+		
+		// Pega usuário logado
 		Usuario usuario = authenticationHelper.getUsuario();
 		if(usuario == null) 
 			throw new UsuarioInexistenteOuDeslogadoException();
-		
+		// Cria compra
 		Compra compra = new Compra();
 		compra.setQuantidadeIngresso(compraDTO.getIngressosInteira() + compraDTO.getIngressosMeia());
 		compra.setUsuario(usuario);
 		compra.setDataCompra(LocalDate.now());
-		compra.setCodigo(Long.parseLong(codigo));
-		
+		compra.setCodigo(Long.parseLong(chaveUnica));
+		// Busca evento relacionado
 		Evento evento = eventoRepository.findByUsuario(usuario);
-		Double valorTotal = getValorTotal(compraDTO, evento);
-		compra.setValorTotal(BigDecimal.valueOf(valorTotal));
+		compra.setValorTotal(getValorTotal(compraDTO, evento));
 		compra.setSituacao(SituacaoEnum.PENDENTE);
+		// Salva a compra
 		Compra compraSave = compraRepository.save(compra);
-
+        // Salva os ingresso de acordo com a faixa etaria
 		quantidadeTotalIngressos = evento.getQuantidadeIngresso();
 		salvarIngresso(evento, compraSave, compraDTO.getIngressosInteira().intValue(), FaixaEtariaEnum.INTEIRA, StatusEnum.PENDENTE);
 		salvarIngresso(evento, compraSave, compraDTO.getIngressosMeia().intValue(), FaixaEtariaEnum.MEIA, StatusEnum.PENDENTE);
@@ -65,11 +76,25 @@ public class CompraService {
 		return compra;
 	}
 	
+	/**
+	 * <p>
+	 *  Busca as compras do usuário logado;
+	 * </p>
+	 * @param pageable
+	 * @return
+	 */
 	public Page<Compra> buscarCompras(Pageable pageable) {
 		Usuario usuario = authenticationHelper.getUsuario();
 		return compraRepository.findByUsuario(usuario, pageable);
 	}
 	
+	/**
+	 * <p>
+	 *   Altera a situação da compra, caso o pagamento seja aprovado ou cancelado.
+	 * </p>
+	 * @param codigo
+	 * @param situacaoEnum
+	 */
 	public void alteraCompra(Long codigo, SituacaoEnum situacaoEnum ) {
 		Compra compra = compraRepository.findOne(codigo);
 		if( compra == null) 
@@ -79,6 +104,13 @@ public class CompraService {
 		compraRepository.save(compra);
 	}
 	
+	/**
+	 * <p>
+	 *   Altera o status do ingresso, caso o pagamento seja aprovado ou cancelado.
+	 * </p>
+	 * @param codigo
+	 * @param status
+	 */
 	public void alteraIngresso(String codigo, StatusEnum status ) {
 		Ingresso ingresso = ingressoRepository.findOne(Long.parseLong(codigo));
 		if( ingresso == null) 
@@ -89,6 +121,17 @@ public class CompraService {
 		ingressoRepository.save(ingresso);
 	}
 
+	
+	/**
+	 * <p>
+	 * Método que salva os ingressos relacionado a uma compra.
+	 * </p>
+	 * @param evento
+	 * @param compraSave
+	 * @param quantidade
+	 * @param faixaEtaria
+	 * @param status
+	 */
 	private void salvarIngresso(Evento evento, Compra compraSave, Integer quantidade, FaixaEtariaEnum faixaEtaria, StatusEnum status) {
 		if (quantidadeTotalIngressos > quantidade) {
 			for (int i = 0; i < quantidade; i++) {
@@ -98,11 +141,30 @@ public class CompraService {
 		}
 	}
 
-	private double getValorTotal(CompraDTO compraDTO, Evento evento) {
-		return (compraDTO.getIngressosInteira() * evento.getValorIngresso().doubleValue())
-				+ (compraDTO.getIngressosMeia() * (evento.getValorIngresso().doubleValue() / 2));
+	/**
+	 * <p>
+	 *  Método que pega o valor total da compra.
+	 * </p>
+	 * @param compraDTO
+	 * @param evento
+	 * @return valorTotal
+	 */
+	private BigDecimal getValorTotal(CompraDTO compraDTO, Evento evento) {
+		return BigDecimal.valueOf((compraDTO.getIngressosInteira() * evento.getValorIngresso().doubleValue())
+				+ (compraDTO.getIngressosMeia() * (evento.getValorIngresso().doubleValue() / 2)));
 	}
 
+	
+	/**
+	 * <p>
+	 *  Método que cria a instancia dos ingressos.
+	 * </p
+	 * @param compra
+	 * @param evento
+	 * @param faixaEtaria
+	 * @param status
+	 * @return ingresso
+	 */
 	private Ingresso criaIngresso(Compra compra, Evento evento, FaixaEtariaEnum faixaEtaria, StatusEnum status) {
 		Ingresso ingresso = new Ingresso();
 		ingresso.setCompra(compra);
