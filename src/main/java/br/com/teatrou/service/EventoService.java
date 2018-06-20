@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import br.com.teatrou.exception.EventoInexistenteException;
 import br.com.teatrou.exception.UsuarioInexistenteOuDeslogadoException;
 import br.com.teatrou.model.Evento;
 import br.com.teatrou.model.Usuario;
@@ -105,6 +106,14 @@ public class EventoService {
 		Evento eventoSalvo = BuscaPeloCodigo(codigo);
 		eventoSalvo.setDescricao(descricao);
 		return salvar(eventoSalvo);
+	}
+
+	public void retomaIngresso(String codigo) {
+		Evento evento = BuscaPeloCodigo(Long.parseLong(codigo));
+		if(evento == null) 
+			throw new EventoInexistenteException();
+		evento.setQuantidadeIngresso(evento.getQuantidadeIngresso() + 1);
+		eventoRepository.save(evento);
 	}
 
 }

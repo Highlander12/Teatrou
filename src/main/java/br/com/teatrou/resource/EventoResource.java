@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.teatrou.model.Anexo;
 import br.com.teatrou.model.Evento;
+import br.com.teatrou.model.dto.AnexoDTO;
 import br.com.teatrou.repository.EventoRepository;
 import br.com.teatrou.repository.filter.EventoFilter;
 import br.com.teatrou.service.EventoService;
@@ -43,9 +43,9 @@ public class EventoResource {
 
 	@PostMapping("/image")
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_EVENTO')")
-	public Anexo uploadImage(@RequestParam MultipartFile arquivo) {
+	public AnexoDTO uploadImage(@RequestParam MultipartFile arquivo) {
 		String nome =  s3.salvarTemporariamente(arquivo);
-		return new Anexo(nome, s3.configurarUrl(nome));
+		return new AnexoDTO(nome, s3.configurarUrl(nome));
 	}
 	
 	

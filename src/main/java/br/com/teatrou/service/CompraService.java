@@ -18,11 +18,11 @@ import br.com.teatrou.model.Usuario;
 import br.com.teatrou.model.dto.CompraDTO;
 import br.com.teatrou.model.enums.FaixaEtariaEnum;
 import br.com.teatrou.model.enums.SituacaoEnum;
+import br.com.teatrou.model.enums.StatusEnum;
 import br.com.teatrou.repository.CompraRepository;
 import br.com.teatrou.repository.EventoRepository;
 import br.com.teatrou.repository.IngressoRepository;
 import br.com.teatrou.token.AuthenticationHelper;
-import net.sf.jasperreports.engine.xml.JRExpressionFactory.IntegerExpressionFactory;
 
 @Service
 public class CompraService {
@@ -55,39 +55,16 @@ public class CompraService {
 		Evento evento = eventoRepository.findByUsuario(usuario);
 		Double valorTotal = getValorTotal(compraDTO, evento);
 		compra.setValorTotal(BigDecimal.valueOf(valorTotal));
-		compra.setSituacao(SituacaoEnum.AGUARDANDO_PAGAMENTO);
+		compra.setSituacao(SituacaoEnum.PENDENTE);
 		Compra compraSave = compraRepository.save(compra);
 
 		quantidadeTotalIngressos = evento.getQuantidadeIngresso();
-		salvarIngresso(evento, compraSave, compraDTO.getIngressosInteira().intValue(), FaixaEtariaEnum.INTEIRA, SituacaoEnum.AGUARDANDO_PAGAMENTO);
-		salvarIngresso(evento, compraSave, compraDTO.getIngressosMeia().intValue(), FaixaEtariaEnum.MEIA, SituacaoEnum.AGUARDANDO_PAGAMENTO);
+		salvarIngresso(evento, compraSave, compraDTO.getIngressosInteira().intValue(), FaixaEtariaEnum.INTEIRA, StatusEnum.PENDENTE);
+		salvarIngresso(evento, compraSave, compraDTO.getIngressosMeia().intValue(), FaixaEtariaEnum.MEIA, StatusEnum.PENDENTE);
 
 		return compra;
 	}
-
-	private void salvarIngresso(Evento evento, Compra compraSave, Integer quantidade, FaixaEtariaEnum faixaEtariaEnum, SituacaoEnum situacaoEnum) {
-		if (quantidadeTotalIngressos > quantidade) {
-			for (int i = 0; i < quantidade; i++) {
-				ingressoRepository.save(criaIngresso(compraSave, evento, faixaEtariaEnum, situacaoEnum));
-				quantidadeTotalIngressos--;
-			}
-		}
-	}
-
-	private double getValorTotal(CompraDTO compraDTO, Evento evento) {
-		return (compraDTO.getIngressosInteira() * evento.getValorIngresso().doubleValue())
-				+ (compraDTO.getIngressosMeia() * (evento.getValorIngresso().doubleValue() / 2));
-	}
-
-	private Ingresso criaIngresso(Compra compra, Evento evento, FaixaEtariaEnum faixaEtariaEnum, SituacaoEnum situacaoEnum) {
-		Ingresso ingresso = new Ingresso();
-		ingresso.setCompra(compra);
-		ingresso.setFaixaEtaria(faixaEtariaEnum);
-		ingresso.setEvento(evento);
-		ingresso.setSituacao(situacaoEnum);
-		return ingresso;
-	}
-
+	
 	public Page<Compra> buscarCompras(Pageable pageable) {
 		Usuario usuario = authenticationHelper.getUsuario();
 		return compraRepository.findByUsuario(usuario, pageable);
@@ -102,15 +79,37 @@ public class CompraService {
 		compraRepository.save(compra);
 	}
 	
-	public void alteraIngresso(Long codigo, SituacaoEnum situacaoEnum ) {
-		Ingresso ingresso = ingressoRepository.findOne(codigo);
+	public void alteraIngresso(String codigo, StatusEnum status ) {
+		Ingresso ingresso = ingressoRepository.findOne(Long.parseLong(codigo));
 		if( ingresso == null) 
 			throw new IngressoInexistenteException();
 		
-		ingresso.setSituacao(situacaoEnum);
+		ingresso.setStatus(status);
 		
 		ingressoRepository.save(ingresso);
 	}
 
+	private void salvarIngresso(Evento evento, Compra compraSave, Integer quantidade, FaixaEtariaEnum faixaEtaria, StatusEnum status) {
+		if (quantidadeTotalIngressos > quantidade) {
+			for (int i = 0; i < quantidade; i++) {
+				ingressoRepository.save(criaIngresso(compraSave, evento, faixaEtaria, status));
+				quantidadeTotalIngressos--;
+			}
+		}
+	}
+
+	private double getValorTotal(CompraDTO compraDTO, Evento evento) {
+		return (compraDTO.getIngressosInteira() * evento.getValorIngresso().doubleValue())
+				+ (compraDTO.getIngressosMeia() * (evento.getValorIngresso().doubleValue() / 2));
+	}
+
+	private Ingresso criaIngresso(Compra compra, Evento evento, FaixaEtariaEnum faixaEtaria, StatusEnum status) {
+		Ingresso ingresso = new Ingresso();
+		ingresso.setCompra(compra);
+		ingresso.setFaixaEtaria(faixaEtaria);
+		ingresso.setEvento(evento);
+		ingresso.setStatus(status);
+		return ingresso;
+	}
 
 }
