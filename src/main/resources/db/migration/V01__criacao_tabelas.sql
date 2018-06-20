@@ -20,7 +20,7 @@ CREATE TABLE usuario_permissao (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE compra (
-   codigo BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
+   codigo VARCHAR(40) PRIMARY KEY,
    codigo_usuario BIGINT(20),
    quantidade_ingresso INT NOT NULL,
    data_compra DATE NOT NULL,

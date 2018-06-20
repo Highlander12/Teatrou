@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import br.com.teatrou.model.enums.FaixaEtariaEnum;
 import br.com.teatrou.model.enums.SituacaoEnum;
+import br.com.teatrou.model.enums.StatusEnum;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,8 +43,8 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ing
 	private FaixaEtariaEnum faixaEtaria;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "situacao")
-	private SituacaoEnum situacao;
+	@Column(name = "status")
+	private StatusEnum status;
 
 	@NotNull
 	private @Getter(AccessLevel.NONE) Boolean ativo;
