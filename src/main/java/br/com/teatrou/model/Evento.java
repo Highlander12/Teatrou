@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,11 +31,12 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name= "evento")
+@Component
 public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Evento {
 	
 	@JsonIgnore
 	@Transient
-	public static S3 s3;
+	private static S3 s3;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,11 +87,17 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Eve
 	@NotNull
 	private @Getter(AccessLevel.NONE) Boolean ativo;
 	
+	@Autowired
+	public void setS3(S3 s3) {
+		this.s3 = s3;
+	}
+	
 	
 	@PostLoad
 	public void postLoad() {
 		if(StringUtils.hasText(this.getAnexo())) {
-			setUrlAnexo(s3.configurarUrl(this.getAnexo()));
+			this.urlAnexo =  s3.configurarUrl(this.anexo);
+					
 		}
 	}
 	

@@ -61,7 +61,7 @@ public class CompraService {
 		compra.setQuantidadeIngresso(compraDTO.getIngressosInteira() + compraDTO.getIngressosMeia());
 		compra.setUsuario(usuario);
 		compra.setDataCompra(LocalDate.now());
-		compra.setCodigo(Long.parseLong(chaveUnica));
+		compra.setCodigo(chaveUnica);
 		// Busca evento relacionado
 		Evento evento = eventoRepository.findByUsuario(usuario);
 		compra.setValorTotal(getValorTotal(compraDTO, evento));

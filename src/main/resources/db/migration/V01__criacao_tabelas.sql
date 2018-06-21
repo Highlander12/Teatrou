@@ -47,9 +47,9 @@ CREATE TABLE evento (
  
  
  CREATE TABLE ingresso (
-   codigo BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
+   codigo VARCHAR(40)  PRIMARY KEY,
    codigo_evento BIGINT(20),
-   codigo_compra BIGINT(20),
+   codigo_compra VARCHAR(40),
    faixa_etaria VARCHAR(20) NOT NULL,
    ativo BOOLEAN NOT NULL,
    FOREIGN KEY (codigo_evento) REFERENCES evento(codigo),
