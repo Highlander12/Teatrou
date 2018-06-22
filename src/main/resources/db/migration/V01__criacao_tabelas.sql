@@ -20,7 +20,7 @@ CREATE TABLE usuario_permissao (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE compra (
-   codigo VARCHAR(40) PRIMARY KEY,
+   codigo VARCHAR(255) PRIMARY KEY,
    codigo_usuario BIGINT(20),
    quantidade_ingresso INT NOT NULL,
    data_compra DATE NOT NULL,
@@ -47,9 +47,9 @@ CREATE TABLE evento (
  
  
  CREATE TABLE ingresso (
-   codigo VARCHAR(40)  PRIMARY KEY,
+   codigo VARCHAR(255)  PRIMARY KEY,
    codigo_evento BIGINT(20),
-   codigo_compra VARCHAR(40),
+   codigo_compra VARCHAR(255),
    faixa_etaria VARCHAR(20) NOT NULL,
    ativo BOOLEAN NOT NULL,
    FOREIGN KEY (codigo_evento) REFERENCES evento(codigo),

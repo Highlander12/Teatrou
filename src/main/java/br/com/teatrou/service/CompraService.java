@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.teatrou.exception.CompraInexistenteException;
+import br.com.teatrou.exception.EventoInexistenteException;
 import br.com.teatrou.exception.IngressoInexistenteException;
 import br.com.teatrou.exception.UsuarioInexistenteOuDeslogadoException;
 import br.com.teatrou.model.Compra;
@@ -41,18 +42,19 @@ public class CompraService {
 
 	/**
 	 * <p>
-	 *  Método que registra a compra como pendente, reservando os ingressos até que o pagamento seja aprovado,
-	 *  ou cancelado.
+	 * Método que registra a compra como pendente, reservando os ingressos até que o
+	 * pagamento seja aprovado, ou cancelado.
 	 * </p>
+	 * 
 	 * @param compraDTO
 	 * @param chaveUnica
-	 * @return compra 
+	 * @return compra
 	 */
 	public Compra registrarCompraPendente(CompraDTO compraDTO, String chaveUnica) {
-		
+
 		// Pega usuário logado
 		Usuario usuario = usuarioService.buscaPeloCodigo(compraDTO.getCodigoUsuario());
-		if(usuario == null) 
+		if (usuario == null)
 			throw new UsuarioInexistenteOuDeslogadoException();
 		// Cria compra
 		Compra compra = new Compra();
@@ -61,64 +63,72 @@ public class CompraService {
 		compra.setDataCompra(LocalDate.now());
 		compra.setCodigo(chaveUnica);
 		// Busca evento relacionado
-		Evento evento = eventoRepository.findByUsuario(usuario);
+		Long codEvento = compraDTO.getCodigoEvento();
+		Evento evento = eventoRepository.findOne(codEvento);
+		if (evento == null)
+			throw new EventoInexistenteException();
 		compra.setValorTotal(getValorTotal(compraDTO, evento));
 		compra.setSituacao(SituacaoEnum.PENDENTE);
 		// Salva a compra
 		Compra compraSave = compraRepository.save(compra);
-        // Salva os ingresso de acordo com a faixa etaria
+		// Salva os ingresso de acordo com a faixa etaria
 		quantidadeTotalIngressos = evento.getQuantidadeIngresso();
-		salvarIngresso(evento, compraSave, compraDTO.getIngressosInteira().intValue(), FaixaEtariaEnum.INTEIRA, StatusEnum.PENDENTE);
-		salvarIngresso(evento, compraSave, compraDTO.getIngressosMeia().intValue(), FaixaEtariaEnum.MEIA, StatusEnum.PENDENTE);
+		salvarIngresso(evento, compraSave, compraDTO.getIngressosInteira().intValue(), FaixaEtariaEnum.INTEIRA,
+				StatusEnum.PENDENTE);
+		salvarIngresso(evento, compraSave, compraDTO.getIngressosMeia().intValue(), FaixaEtariaEnum.MEIA,
+				StatusEnum.PENDENTE);
 
 		return compra;
 	}
-	
+
 	/**
 	 * <p>
-	 *   Altera a situação da compra, caso o pagamento seja aprovado ou cancelado.
+	 * Altera a situação da compra, caso o pagamento seja aprovado ou cancelado.
 	 * </p>
+	 * 
 	 * @param codigo
 	 * @param situacaoEnum
 	 */
-	public void alteraCompra(String codigo, SituacaoEnum situacaoEnum ) {
+	public void alteraCompra(String codigo, SituacaoEnum situacaoEnum) {
 		Compra compra = compraRepository.findOne(codigo);
-		if( compra == null) 
+		if (compra == null)
 			throw new CompraInexistenteException();
 		compra.setSituacao(situacaoEnum);
-		
+
 		compraRepository.save(compra);
 	}
-	
+
 	/**
 	 * <p>
-	 *   Altera o status do ingresso, caso o pagamento seja aprovado ou cancelado.
+	 * Altera o status do ingresso, caso o pagamento seja aprovado ou cancelado.
 	 * </p>
+	 * 
 	 * @param codigo
 	 * @param status
 	 */
-	public void alteraIngresso(String codigo, StatusEnum status ) {
+	public void alteraIngresso(String codigo, StatusEnum status) {
 		Ingresso ingresso = ingressoRepository.findOne(codigo);
-		if( ingresso == null) 
+		if (ingresso == null)
 			throw new IngressoInexistenteException();
-		
+
 		ingresso.setStatus(status);
-		
+
 		ingressoRepository.save(ingresso);
 	}
 
-	
 	/**
 	 * <p>
 	 * Método que salva os ingressos relacionado a uma compra.
 	 * </p>
+	 * 
 	 * @param evento
 	 * @param compraSave
 	 * @param quantidade
 	 * @param faixaEtaria
 	 * @param status
 	 */
-	private void salvarIngresso(Evento evento, Compra compraSave, Integer quantidade, FaixaEtariaEnum faixaEtaria, StatusEnum status) {
+	private void salvarIngresso(Evento evento, Compra compraSave, Integer quantidade, FaixaEtariaEnum faixaEtaria,
+			StatusEnum status) {
 		if (quantidadeTotalIngressos > quantidade) {
 			for (int i = 0; i < quantidade; i++) {
 				ingressoRepository.save(criaIngresso(compraSave, evento, faixaEtaria, status));
@@ -129,8 +139,9 @@ public class CompraService {
 
 	/**
 	 * <p>
-	 *  Método que pega o valor total da compra.
+	 * Método que pega o valor total da compra.
 	 * </p>
+	 * 
 	 * @param compraDTO
 	 * @param evento
 	 * @return valorTotal
@@ -140,11 +151,10 @@ public class CompraService {
 				+ (compraDTO.getIngressosMeia() * (evento.getValorIngresso().doubleValue() / 2)));
 	}
 
-	
 	/**
 	 * <p>
-	 *  Método que cria a instancia dos ingressos.
-	 * </p
+	 * Método que cria a instancia dos ingressos. </p
+	 * 
 	 * @param compra
 	 * @param evento
 	 * @param faixaEtaria
@@ -153,17 +163,25 @@ public class CompraService {
 	 */
 	private Ingresso criaIngresso(Compra compra, Evento evento, FaixaEtariaEnum faixaEtaria, StatusEnum status) {
 		Ingresso ingresso = new Ingresso();
-		ingresso.setCodigo(gerarChaveUnica(compra , evento));
+		ingresso.setCodigo(gerarChaveUnica(compra, evento));
 		ingresso.setCompra(compra);
 		ingresso.setFaixaEtaria(faixaEtaria);
 		ingresso.setEvento(evento);
 		ingresso.setStatus(status);
+		ingresso.setAtivo(true);
 		return ingresso;
 	}
-	
+
+	public void consumer(String codigo) {
+		Ingresso ingresso = ingressoRepository.findOne(codigo);
+		if(ingresso == null)
+			throw new IngressoInexistenteException();
+		
+		ingresso.setAtivo(false);
+	}
 
 	private String gerarChaveUnica(Compra compra, Evento evento) {
-		return UUID.randomUUID().toString() + "_" + compra.getCodigo() + "_" + evento.getCodigo();
+		return UUID.randomUUID().toString() + "_" + compra.getCodigo().toString() + "_" + evento.getCodigo();
 	}
 
 }

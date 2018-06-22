@@ -56,7 +56,9 @@ public class EventoService {
 	 */
 	public Evento salvar(Evento evento) {
 
-		Usuario usuario = evento.getUsuario();
+		Long codUsuario = evento.getUsuario().getCodigo();
+		Usuario usuario = usuarioRepository.findByCodigo(codUsuario);
+		
 		if (usuario == null) {
 			throw new UsuarioInexistenteOuDeslogadoException();
 		}
@@ -181,5 +183,7 @@ public class EventoService {
 		evento.setQuantidadeIngresso(evento.getQuantidadeIngresso() + 1);
 		eventoRepository.save(evento);
 	}
+	
+
 
 }

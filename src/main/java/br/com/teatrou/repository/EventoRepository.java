@@ -17,5 +17,6 @@ public interface EventoRepository extends JpaRepository<Evento, Long>, EventoRep
 	Page<Evento> findAll(Pageable pageable);
 	
 	Evento findByUsuario(Usuario usuario);
+	
 
 }
