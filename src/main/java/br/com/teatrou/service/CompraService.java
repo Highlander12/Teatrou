@@ -81,7 +81,7 @@ public class CompraService {
 	 * @param codigo
 	 * @param situacaoEnum
 	 */
-	public void alteraCompra(Long codigo, SituacaoEnum situacaoEnum ) {
+	public void alteraCompra(String codigo, SituacaoEnum situacaoEnum ) {
 		Compra compra = compraRepository.findOne(codigo);
 		if( compra == null) 
 			throw new CompraInexistenteException();

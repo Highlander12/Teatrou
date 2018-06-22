@@ -10,7 +10,7 @@ import br.com.teatrou.model.Usuario;
 import br.com.teatrou.repository.compra.CompraRepositoryQuery;
 
 @Repository
-public interface CompraRepository extends  JpaRepository<Compra, Long>, CompraRepositoryQuery{
+public interface CompraRepository extends  JpaRepository<Compra, String>, CompraRepositoryQuery{
 
 	Page<Compra> findByUsuario(Usuario usuario, Pageable pageable);
 

@@ -134,7 +134,7 @@ public class PagSeguroService {
 	 */
 	private void registrarStatus(Transaction transaction, SituacaoEnum situacao) {
 		// Muda o status da compra
-		compraService.alteraCompra(Long.parseLong(transaction.getReference()), situacao);
+		compraService.alteraCompra(transaction.getReference(), situacao);
 		
 		// Pega todos itens, no caso os ingressos
 		List<Item> items = transaction.getItems();
