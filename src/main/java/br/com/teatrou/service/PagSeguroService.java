@@ -212,7 +212,7 @@ public class PagSeguroService {
 		Usuario usuario = usuarioService.buscaPeloCodigo(compraDTO.getCodigoUsuario());
 		if (usuario == null)
 			throw new UsuarioInexistenteOuDeslogadoException();
-		return new Sender(usuario.getEmail(), usuario.getNome());
+		return new Sender(usuario.getNome(),usuario.getEmail());
 	}
 
 	
