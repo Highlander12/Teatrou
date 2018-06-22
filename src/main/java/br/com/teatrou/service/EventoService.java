@@ -56,14 +56,13 @@ public class EventoService {
 	 */
 	public Evento salvar(Evento evento) {
 
-//		Usuario usuario = authenticationHelper.getUsuario();
-//		if (usuario == null) {
-//			throw new UsuarioInexistenteOuDeslogadoException();
-//		}
+		Usuario usuario = evento.getUsuario();
+		if (usuario == null) {
+			throw new UsuarioInexistenteOuDeslogadoException();
+		}
 		if (StringUtils.hasText(evento.getAnexo())) {
 			s3.salvar(evento.getAnexo());
 		}
-//		evento.setUsuario(usuario);
 
 		return eventoRepository.save(evento);
 	}
@@ -94,7 +93,7 @@ public class EventoService {
 	 * @return evento atualizado
 	 */
 	public Evento atualizar(Long codigo, Evento evento) {
-		Evento eventoSalvo = BuscaPeloCodigo(codigo);
+		Evento eventoSalvo = buscaPeloCodigo(codigo);
 		if (!evento.getUsuario().equals(eventoSalvo.getUsuario())) {
 			validUsuario(evento);
 		}
@@ -118,7 +117,7 @@ public class EventoService {
 	 * @param codigo
 	 * @return evento específico
 	 */
-	private Evento BuscaPeloCodigo(Long codigo) {
+	private Evento buscaPeloCodigo(Long codigo) {
 		Evento eventoSalvo = eventoRepository.findOne(codigo);
 		if (eventoSalvo == null) {
 			throw new EmptyResultDataAccessException(1);
@@ -136,7 +135,7 @@ public class EventoService {
 	 * @return
 	 */
 	public Evento atualizarDataEvento(Long codigo, LocalDate dataEvento) {
-		Evento eventoSalvo = BuscaPeloCodigo(codigo);
+		Evento eventoSalvo = buscaPeloCodigo(codigo);
 		eventoSalvo.setDataEvento(dataEvento);
 		return salvar(eventoSalvo);
 	}
@@ -149,7 +148,7 @@ public class EventoService {
 	 * @return evento ativado
 	 */
 	public Evento ativarEvento(Long codigo) {
-		Evento eventoSalvo = BuscaPeloCodigo(codigo);
+		Evento eventoSalvo = buscaPeloCodigo(codigo);
 		eventoSalvo.setAtivo(true);
 		return salvar(eventoSalvo);
 	}
@@ -163,7 +162,7 @@ public class EventoService {
 	 * @return evento atualizado
 	 */
 	public Evento atualizarDescricao(Long codigo, String descricao) {
-		Evento eventoSalvo = BuscaPeloCodigo(codigo);
+		Evento eventoSalvo = buscaPeloCodigo(codigo);
 		eventoSalvo.setDescricao(descricao);
 		return salvar(eventoSalvo);
 	}
@@ -176,7 +175,7 @@ public class EventoService {
 	 * @param codigo
 	 */
 	public void retomaIngresso(String codigo) {
-		Evento evento = BuscaPeloCodigo(Long.parseLong(codigo));
+		Evento evento = buscaPeloCodigo(Long.parseLong(codigo));
 		if(evento == null) 
 			throw new EventoInexistenteException();
 		evento.setQuantidadeIngresso(evento.getQuantidadeIngresso() + 1);

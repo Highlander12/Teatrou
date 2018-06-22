@@ -47,10 +47,7 @@ public class CompraRepositoryImpl implements CompraRepositoryQuery {
 
 	private Predicate[] filtrarPesquisa(CompraFilter compraFilter, CriteriaBuilder builder, Root<Compra> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
-        
-//		if (authenticationHelper.getUser() != null) {
-//			predicates.add(builder.equal(root.get(Compra_.usuario), authenticationHelper.getUsuario()));
-//		}                                                                                         // TODO: PRODUÇÃO
+                                                                                                 // TODO: PRODUÇÃO
 		if (!StringUtils.isEmpty(compraFilter.getUsuario())) {
 			predicates.add(builder.equal(root.get(Compra_.usuario), compraFilter.getUsuario()));  // TODO: BASIC
 		}

@@ -35,7 +35,7 @@ import br.com.uol.pagseguro.service.NotificationService;
 public class PagSeguroService {
 
 	@Autowired
-	private AuthenticationHelper authenticationHelper;
+	private UsuarioService usuarioService;
 
 	@Autowired
 	private TeatrouApiProperty property;
@@ -69,7 +69,7 @@ public class PagSeguroService {
 			request.setReference(chaveUnica);
 			request.setCurrency(Currency.BRL);
 			// Dados do Usuario
-			request.setSender(getSender());
+			request.setSender(getSender(compraDTO));
 			// Items do carrinho
 			request.setItems(gerarItems(compraDTO, chaveUnica));
 			// URL para que o PagSeguro ira chamar;
@@ -205,10 +205,11 @@ public class PagSeguroService {
 	 * <p>
 	 *   Método que cria o comprador da transação
 	 * </p>
+	 * @param compraDTO 
 	 * @return comprador
 	 */
-	private Sender getSender() {
-		Usuario usuario = authenticationHelper.getUsuario();
+	private Sender getSender(CompraDTO compraDTO) {
+		Usuario usuario = usuarioService.buscaPeloCodigo(compraDTO.getCodigoUsuario());
 		if (usuario == null)
 			throw new UsuarioInexistenteOuDeslogadoException();
 		return new Sender(usuario.getEmail(), usuario.getNome());

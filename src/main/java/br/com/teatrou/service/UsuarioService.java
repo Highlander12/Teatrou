@@ -23,7 +23,7 @@ public class UsuarioService {
 	private UsuarioRepository usuarioRepository;
 	
 
-	public Usuario findByCodigo(Long codigo) {
+	public Usuario buscaPeloCodigo(Long codigo) {
 		Usuario usuario = usuarioRepository.findOne(codigo);
 		if (usuario == null) {
 			throw new IllegalArgumentException();
@@ -35,17 +35,7 @@ public class UsuarioService {
 		return usuarioRepository.findAll(pageable);
 	}
 
-	public static boolean validaPassword(final String password) {
-	    Pattern p = Pattern.compile("^(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!?])(?=\\S+$).{8,}$");
-	    Matcher m = p.matcher(password);
-	return m.matches();
-	}
 	
-	public static boolean validaEmail(final String email) {
-		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-		Matcher m = p.matcher(email);
-		return m.matches();
-	}
 	public Usuario salvar(Usuario usuario) {
 		if(!validaPassword(usuario.getSenha()))
 			throw new SenhaInvalidaException("Digite uma senha valida.");
@@ -57,13 +47,25 @@ public class UsuarioService {
 	
 
 	public Usuario atualizar(Long codigo, Usuario usuario) {
-		Usuario usuarioSalvo = findByCodigo(codigo);
+		Usuario usuarioSalvo = buscaPeloCodigo(codigo);
 		BeanUtils.copyProperties(usuario, usuarioSalvo, "codigo");
 		return salvar(usuario);
 	}
 	
-	public String enconder (String senha) {
+	private String enconder (String senha) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.encode(senha);
+	}
+	
+	private Boolean validaPassword(final String password) {
+	    Pattern p = Pattern.compile("^(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!?])(?=\\S+$).{8,}$");
+	    Matcher m = p.matcher(password);
+	return m.matches();
+	}
+	
+	private Boolean validaEmail(final String email) {
+		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+		Matcher m = p.matcher(email);
+		return m.matches();
 	}
 }
