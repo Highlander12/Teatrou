@@ -34,8 +34,9 @@ import br.com.uol.pagseguro.service.NotificationService;
 @Service
 public class PagSeguroService {
 
-//	@Autowired
-//	private AuthenticationHelper authenticationHelper;
+	@Autowired
+	private UsuarioService usuarioService;
+
 
 	@Autowired
 	private TeatrouApiProperty property;
@@ -49,8 +50,6 @@ public class PagSeguroService {
 	@Autowired
 	private IngressoRepository ingressoRepository;
 	
-	@Autowired
-	private UsuarioService usuarioService;
 	
 	/**
 	 * <p> Método responsável pela criação do link de pagamento, envio dos ingressos para o PagSeguro
@@ -71,7 +70,7 @@ public class PagSeguroService {
 			request.setReference(chaveUnica);
 			request.setCurrency(Currency.BRL);
 			// Dados do Usuario
-			request.setSender(getSender(compraDTO.getCodigoUsuario()));
+			request.setSender(getSender(compraDTO));
 			// Items do carrinho
 			request.setItems(gerarItems(compraDTO, chaveUnica));
 			// URL para que o PagSeguro ira chamar;
@@ -136,7 +135,7 @@ public class PagSeguroService {
 	 */
 	private void registrarStatus(Transaction transaction, SituacaoEnum situacao) {
 		// Muda o status da compra
-		compraService.alteraCompra(Long.parseLong(transaction.getReference()), situacao);
+		compraService.alteraCompra(transaction.getReference(), situacao);
 		
 		// Pega todos itens, no caso os ingressos
 		List<Item> items = transaction.getItems();
@@ -210,8 +209,8 @@ public class PagSeguroService {
 	 * @param codigoUsuario 
 	 * @return comprador
 	 */
-	private Sender getSender(Long codigoUsuario) {
-		Usuario usuario =  usuarioService.findByCodigo(codigoUsuario);
+	private Sender getSender(CompraDTO compraDTO) {
+		Usuario usuario = usuarioService.buscaPeloCodigo(compraDTO.getCodigoUsuario());
 		if (usuario == null)
 			throw new UsuarioInexistenteOuDeslogadoException();
 		return new Sender(usuario.getEmail(), usuario.getNome());

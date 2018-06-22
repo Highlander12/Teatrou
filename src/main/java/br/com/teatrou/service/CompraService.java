@@ -2,6 +2,7 @@ package br.com.teatrou.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class CompraService {
 	public Compra registrarCompraPendente(CompraDTO compraDTO, String chaveUnica) {
 		
 		// Pega usuário logado
-		Usuario usuario = usuarioService.findByCodigo(compraDTO.getCodigoUsuario());
+		Usuario usuario = usuarioService.buscaPeloCodigo(compraDTO.getCodigoUsuario());
 		if(usuario == null) 
 			throw new UsuarioInexistenteOuDeslogadoException();
 		// Cria compra
@@ -75,24 +76,12 @@ public class CompraService {
 	
 	/**
 	 * <p>
-	 *  Busca as compras do usuário logado;
-	 * </p>
-	 * @param pageable
-	 * @return
-	 */
-//	public Page<Compra> buscarCompras(Pageable pageable, Long usuario) {
-//		Usuario usuario = usuarioService.findByCodigo(compraDTO.getCodigoUsuario());
-//		return compraRepository.findByUsuario(usuario, pageable);
-//	}
-	
-	/**
-	 * <p>
 	 *   Altera a situação da compra, caso o pagamento seja aprovado ou cancelado.
 	 * </p>
 	 * @param codigo
 	 * @param situacaoEnum
 	 */
-	public void alteraCompra(Long codigo, SituacaoEnum situacaoEnum ) {
+	public void alteraCompra(String codigo, SituacaoEnum situacaoEnum ) {
 		Compra compra = compraRepository.findOne(codigo);
 		if( compra == null) 
 			throw new CompraInexistenteException();
@@ -109,7 +98,7 @@ public class CompraService {
 	 * @param status
 	 */
 	public void alteraIngresso(String codigo, StatusEnum status ) {
-		Ingresso ingresso = ingressoRepository.findOne(Long.parseLong(codigo));
+		Ingresso ingresso = ingressoRepository.findOne(codigo);
 		if( ingresso == null) 
 			throw new IngressoInexistenteException();
 		
@@ -164,11 +153,17 @@ public class CompraService {
 	 */
 	private Ingresso criaIngresso(Compra compra, Evento evento, FaixaEtariaEnum faixaEtaria, StatusEnum status) {
 		Ingresso ingresso = new Ingresso();
+		ingresso.setCodigo(gerarChaveUnica(compra , evento));
 		ingresso.setCompra(compra);
 		ingresso.setFaixaEtaria(faixaEtaria);
 		ingresso.setEvento(evento);
 		ingresso.setStatus(status);
 		return ingresso;
+	}
+	
+
+	private String gerarChaveUnica(Compra compra, Evento evento) {
+		return UUID.randomUUID().toString() + "_" + compra.getCodigo() + "_" + evento.getCodigo();
 	}
 
 }
