@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.teatrou.exception.CompraInexistenteException;
@@ -22,7 +20,6 @@ import br.com.teatrou.model.enums.StatusEnum;
 import br.com.teatrou.repository.CompraRepository;
 import br.com.teatrou.repository.EventoRepository;
 import br.com.teatrou.repository.IngressoRepository;
-import br.com.teatrou.token.AuthenticationHelper;
 
 @Service
 public class CompraService {

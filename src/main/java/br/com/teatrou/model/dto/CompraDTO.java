@@ -2,7 +2,6 @@ package br.com.teatrou.model.dto;
 
 import javax.validation.constraints.NotNull;
 
-import br.com.teatrou.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
