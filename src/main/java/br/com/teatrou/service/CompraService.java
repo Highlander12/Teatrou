@@ -37,7 +37,7 @@ public class CompraService {
 	private IngressoRepository ingressoRepository;
 
 	@Autowired
-	private AuthenticationHelper authenticationHelper;
+	private UsuarioService usuarioService;
 
 	private Integer quantidadeTotalIngressos;
 
@@ -53,7 +53,7 @@ public class CompraService {
 	public Compra registrarCompraPendente(CompraDTO compraDTO, String chaveUnica) {
 		
 		// Pega usuário logado
-		Usuario usuario = authenticationHelper.getUsuario();
+		Usuario usuario = usuarioService.findByCodigo(compraDTO.getCodigoUsuario());
 		if(usuario == null) 
 			throw new UsuarioInexistenteOuDeslogadoException();
 		// Cria compra
@@ -61,7 +61,7 @@ public class CompraService {
 		compra.setQuantidadeIngresso(compraDTO.getIngressosInteira() + compraDTO.getIngressosMeia());
 		compra.setUsuario(usuario);
 		compra.setDataCompra(LocalDate.now());
-		compra.setCodigo(Long.parseLong(chaveUnica));
+		compra.setCodigo(chaveUnica);
 		// Busca evento relacionado
 		Evento evento = eventoRepository.findByUsuario(usuario);
 		compra.setValorTotal(getValorTotal(compraDTO, evento));
@@ -83,10 +83,10 @@ public class CompraService {
 	 * @param pageable
 	 * @return
 	 */
-	public Page<Compra> buscarCompras(Pageable pageable) {
-		Usuario usuario = authenticationHelper.getUsuario();
-		return compraRepository.findByUsuario(usuario, pageable);
-	}
+//	public Page<Compra> buscarCompras(Pageable pageable, Long usuario) {
+//		Usuario usuario = usuarioService.findByCodigo(compraDTO.getCodigoUsuario());
+//		return compraRepository.findByUsuario(usuario, pageable);
+//	}
 	
 	/**
 	 * <p>

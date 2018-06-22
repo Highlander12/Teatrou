@@ -2,6 +2,7 @@ package br.com.teatrou.model.dto;
 
 import javax.validation.constraints.NotNull;
 
+import br.com.teatrou.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,8 @@ public @Data @NoArgsConstructor @AllArgsConstructor class CompraDTO {
 	
 	@NotNull(message = "Informe a quantidade ingressos com a faixa etaria inteira")
 	private Integer ingressosInteira;
+	
+	@NotNull(message = "O usuario não foi passado")
+	private Long codigoUsuario;
 	
 }

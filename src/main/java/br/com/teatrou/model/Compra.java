@@ -25,7 +25,7 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class  Co
 
 	
 	@Id
-	private Long codigo;
+	private String codigo;
 	
 	@ManyToOne
 	@JoinColumn(name = "codigo_usuario")

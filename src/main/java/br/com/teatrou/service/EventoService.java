@@ -45,7 +45,6 @@ public class EventoService {
 	public Page<Evento> listar(Pageable pageable) {
 		return eventoRepository.findAll(pageable);
 	}
-
 	
 	/** 
 	 * <p>
@@ -57,14 +56,14 @@ public class EventoService {
 	 */
 	public Evento salvar(Evento evento) {
 
-		Usuario usuario = authenticationHelper.getUsuario();
-		if (usuario == null) {
-			throw new UsuarioInexistenteOuDeslogadoException();
-		}
+//		Usuario usuario = authenticationHelper.getUsuario();
+//		if (usuario == null) {
+//			throw new UsuarioInexistenteOuDeslogadoException();
+//		}
 		if (StringUtils.hasText(evento.getAnexo())) {
 			s3.salvar(evento.getAnexo());
 		}
-		evento.setUsuario(usuario);
+//		evento.setUsuario(usuario);
 
 		return eventoRepository.save(evento);
 	}
