@@ -1,5 +1,6 @@
 package br.com.teatrou.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -197,7 +198,12 @@ public class PagSeguroService {
 		item.setDescription(
 				"INGRESSO EVENTO - " + ingresso.getFaixaEtaria() + " - EVENTO " + ingresso.getEvento().getTitulo());
 		item.setQuantity(1);
-		item.setAmount(ingresso.getEvento().getValorIngresso());
+		if(FaixaEtariaEnum.MEIA.equals(ingresso.getFaixaEtaria())) {
+			item.setAmount(ingresso.getEvento().getValorIngresso().divide(BigDecimal.valueOf(2)));
+		} else {
+			item.setAmount(ingresso.getEvento().getValorIngresso());
+		}
+		
 		return item;
 	}
 

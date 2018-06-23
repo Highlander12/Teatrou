@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.teatrou.model.enums.FaixaEtariaEnum;
 import br.com.teatrou.model.enums.SituacaoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
