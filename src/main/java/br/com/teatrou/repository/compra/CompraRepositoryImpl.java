@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,15 +19,11 @@ import org.springframework.util.StringUtils;
 import br.com.teatrou.model.Compra;
 import br.com.teatrou.model.Compra_;
 import br.com.teatrou.repository.filter.CompraFilter;
-import br.com.teatrou.token.AuthenticationHelper;
 
 public class CompraRepositoryImpl implements CompraRepositoryQuery {
 
 	@PersistenceContext
 	private EntityManager manager;
-
-	@Autowired
-	private AuthenticationHelper authenticationHelper;
 
 	@Override
 	public Page<Compra> filtrar(CompraFilter compraFilter, Pageable pageable) {
@@ -47,12 +42,9 @@ public class CompraRepositoryImpl implements CompraRepositoryQuery {
 
 	private Predicate[] filtrarPesquisa(CompraFilter compraFilter, CriteriaBuilder builder, Root<Compra> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
-        
-//		if (authenticationHelper.getUser() != null) {
-//			predicates.add(builder.equal(root.get(Compra_.usuario), authenticationHelper.getUsuario()));
-//		}                                                                                         // TODO: PRODUÇÃO
+                                                                                                 
 		if (!StringUtils.isEmpty(compraFilter.getUsuario())) {
-			predicates.add(builder.equal(root.get(Compra_.usuario), compraFilter.getUsuario()));  // TODO: BASIC
+			predicates.add(builder.equal(root.get(Compra_.usuario), compraFilter.getUsuario()));  
 		}
 		if (!StringUtils.isEmpty(compraFilter.getDataEventoDe())) {
 			predicates.add(builder.greaterThanOrEqualTo(root.get(Compra_.dataCompra), compraFilter.getDataEventoDe()));

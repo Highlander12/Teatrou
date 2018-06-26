@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import br.com.teatrou.model.enums.FaixaEtariaEnum;
+import br.com.teatrou.model.enums.StatusEnum;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,8 +24,7 @@ import lombok.NoArgsConstructor;
 public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ingresso {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long codigo;
+	private String codigo;
 
 	@ManyToOne
 	@JoinColumn(name = "codigo_evento")
@@ -39,6 +37,10 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ing
 	@Enumerated(EnumType.STRING)
 	@Column(name = "faixa_etaria")
 	private FaixaEtariaEnum faixaEtaria;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private StatusEnum status;
 
 	@NotNull
 	private @Getter(AccessLevel.NONE) Boolean ativo;

@@ -8,9 +8,11 @@ import lombok.Data;
 public @Data class TeatrouApiProperty {
 
 	private final Seguranca seguranca = new Seguranca();
+	private final PagSeguro pagSeguro = new PagSeguro();
 	private final Mail mail = new Mail();
 	private final S3 s3 = new S3();
 	private String originPermitida = "http://localhost:4200";
+	private String origin = "http://localhost:8080";
 
 	public @Data static class S3 {
 		private String accessKeyId;
@@ -31,4 +33,9 @@ public @Data class TeatrouApiProperty {
 		private String password;
 		
 	}
-}
+	
+	public @Data static class PagSeguro {
+		private String email;
+		private String token;
+	}
+ }

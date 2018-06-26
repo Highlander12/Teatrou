@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.teatrou.model.Anexo;
 import br.com.teatrou.model.Evento;
+import br.com.teatrou.model.dto.AnexoDTO;
 import br.com.teatrou.repository.EventoRepository;
 import br.com.teatrou.repository.filter.EventoFilter;
 import br.com.teatrou.service.EventoService;
@@ -41,26 +41,56 @@ public class EventoResource {
 	@Autowired
 	private S3 s3;
 
+	
+	/**
+	 * <p>
+	 * Método utilizado para upload de uma foto de apresentação de um Evento.
+	 * </p>
+	 * @param arquivo
+	 * @return um anexo com nome, e url para acesso na amazon.
+	 */
 	@PostMapping("/image")
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_EVENTO')")
-	public Anexo uploadImage(@RequestParam MultipartFile arquivo) {
+	public AnexoDTO uploadImage(@RequestParam MultipartFile arquivo) {
 		String nome =  s3.salvarTemporariamente(arquivo);
-		return new Anexo(nome, s3.configurarUrl(nome));
+		return new AnexoDTO(nome, s3.configurarUrl(nome));
 	}
 	
-	
+	/**
+	 * <p>
+	 *  Método que filtra os eventos, pelo tema, titulo, descrição e período;
+	 * </p>
+	 * @param eventoFilter
+	 * @param pageable
+	 * @return eventos
+	 */
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_EVENTO')")
 	public ResponseEntity<Page<Evento>> filtrar(EventoFilter eventoFilter, Pageable pageable) {
 		return new ResponseEntity<>(eventoRepository.filtrar(eventoFilter, pageable), HttpStatus.OK);
 	}
 
+	
+	/**
+	 * <p>
+	 * Método que cria um Evento.
+	 * </p>
+	 * @param evento
+	 * @return o Evento criado
+	 */
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_EVENTO')")
 	public ResponseEntity<Evento> salvar(@Valid @RequestBody Evento evento) {
 		return new ResponseEntity<Evento>(eventoService.salvar(evento), HttpStatus.CREATED);
 	}
 
+	/**
+	 * <p>
+	 *	 Busca um Evento específico.
+	 * </p>
+	 * @param codigo
+	 * @return
+	 */
 	@GetMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_EVENTO')")
 	public ResponseEntity<Evento> buscar(@PathVariable(required = true) Long codigo) {
@@ -68,6 +98,14 @@ public class EventoResource {
 		return evento == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(evento);
 	}
 
+	/**
+	 * <p>
+	 *   Deleta um Evento em específico
+	 * </p>
+	 * 
+	 * @param codigo
+	 * @return
+	 */
 	@DeleteMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_EXCLUIR_EVENTO')")
 	public ResponseEntity<Evento> delete(@PathVariable(required = true) Long codigo) {
@@ -75,6 +113,15 @@ public class EventoResource {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
+	
+	/**
+	 * <p>
+	 *  Atualiza um Evento
+	 * </p>
+	 * @param codigo
+	 * @param evento
+	 * @return evento atualizado
+	 */
 	@PutMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_ALTERAR_EVENTO')")
 	public ResponseEntity<Evento> alterar(@PathVariable(required = true) Long codigo,
@@ -82,19 +129,45 @@ public class EventoResource {
 		return new ResponseEntity<>(eventoService.atualizar(codigo, evento), HttpStatus.OK);
 	}
 
+	
+	/**
+	 * <p>
+	 *   Atualiza a data do Evento
+	 * </p>
+	 * @param codigo
+	 * @param dataEvento
+	 * @return evento atualizado
+	 */
 	@PutMapping("/{codigo}/data-pagamento")
 	@PreAuthorize("hasAuthority('ROLE_ALTERAR_EVENTO')")
 	public ResponseEntity<Evento> alterarDataEvento(@PathVariable(required = true) Long codigo,
 			@RequestBody LocalDate dataEvento) {
 		return new ResponseEntity<>(eventoService.atualizarDataEvento(codigo, dataEvento), HttpStatus.OK);
 	}
-
+	
+	/**
+	 * <p>
+	 *   Ativa um Evento
+	 * </p>
+	 * @param codigo
+	 * @param dataEvento
+	 * @return evento atualizado
+	 */
 	@PutMapping("/{codigo}/ativar")
 	@PreAuthorize("hasAuthority('ROLE_ALTERAR_EVENTO')")
 	public ResponseEntity<Evento> ativarEvento(@PathVariable(required = true) Long codigo) {
 		return new ResponseEntity<>(eventoService.ativarEvento(codigo), HttpStatus.OK);
 	}
 
+	
+	/**
+	 * <p>
+	 *   Atualiza a descrição de um evento
+	 * </p>
+	 * @param codigo
+	 * @param dataEvento
+	 * @return evento atualizado
+	 */
 	@PutMapping("/{codigo}/descricao")
 	@PreAuthorize("hasAuthority('ROLE_ALTERAR_EVENTO')")
 	public ResponseEntity<Evento> alterarDescricao(@PathVariable(required = true) Long codigo,

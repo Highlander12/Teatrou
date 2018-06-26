@@ -1,5 +1,5 @@
 CREATE TABLE usuario (
-	codigo BIGINT(20) PRIMARY KEY,
+	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
 	senha VARCHAR(150) NOT NULL
@@ -20,7 +20,7 @@ CREATE TABLE usuario_permissao (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE compra (
-   codigo BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
+   codigo VARCHAR(255) PRIMARY KEY,
    codigo_usuario BIGINT(20),
    quantidade_ingresso INT NOT NULL,
    data_compra DATE NOT NULL,
@@ -47,9 +47,9 @@ CREATE TABLE evento (
  
  
  CREATE TABLE ingresso (
-   codigo BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
+   codigo VARCHAR(255)  PRIMARY KEY,
    codigo_evento BIGINT(20),
-   codigo_compra BIGINT(20),
+   codigo_compra VARCHAR(255),
    faixa_etaria VARCHAR(20) NOT NULL,
    ativo BOOLEAN NOT NULL,
    FOREIGN KEY (codigo_evento) REFERENCES evento(codigo),

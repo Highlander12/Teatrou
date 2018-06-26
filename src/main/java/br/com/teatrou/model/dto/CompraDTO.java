@@ -17,4 +17,7 @@ public @Data @NoArgsConstructor @AllArgsConstructor class CompraDTO {
 	@NotNull(message = "Informe a quantidade ingressos com a faixa etaria inteira")
 	private Integer ingressosInteira;
 	
+	@NotNull(message = "O usuario não foi passado")
+	private Long codigoUsuario;
+	
 }

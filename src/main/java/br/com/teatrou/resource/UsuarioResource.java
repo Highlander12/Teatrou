@@ -29,12 +29,28 @@ public class UsuarioResource {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	
+	/**
+	 * <p>
+	 *  Método que cria um usuário
+	 * </p>
+	 * @param usuario
+	 * @return usuário criado
+	 */
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_USUARIO')")
 	public ResponseEntity<Usuario> salvar(@Valid @RequestBody Usuario usuario) {
 		return new ResponseEntity<Usuario>(usuarioService.salvar(usuario), HttpStatus.CREATED);
 	}
 
+	
+	/**
+	 * <p>
+	 *  Busca um usuário em específico
+	 * </p>
+	 * @param codigo
+	 * @return usuário
+	 */
 	@GetMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_USUARIO')")
 	public ResponseEntity<Usuario> buscar(@PathVariable(required = true) Long codigo) {
@@ -42,6 +58,14 @@ public class UsuarioResource {
 		return usuario == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(usuario);
 	}
 
+	
+	/**
+	 * <p>
+	 *  Atualiza um usuário
+	 * </p>
+	 * @param codigo
+	 * @return usuário atualizado
+	 */
 	@PutMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_ALTERAR_USUARIO')")
 	public ResponseEntity<Usuario> alterar(@PathVariable(required = true) Long codigo,
@@ -49,6 +73,14 @@ public class UsuarioResource {
 		return new ResponseEntity<>(usuarioService.atualizar(codigo, usuario), HttpStatus.OK);
 	}
 
+	
+	/**
+	 * <p>
+	 *  Deleta um usuário em específico
+	 * </p>
+	 * @param codigo
+	 * @return
+	 */
 	@DeleteMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_EXCLUIR_USUARIO')")
 	public ResponseEntity<Usuario> deletar(@PathVariable(required = true) Long codigo) {
