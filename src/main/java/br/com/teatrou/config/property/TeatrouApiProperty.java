@@ -12,7 +12,7 @@ public @Data class TeatrouApiProperty {
 	private final Mail mail = new Mail();
 	private final S3 s3 = new S3();
 	private String originPermitida = "http://localhost:4200";
-	private String origin = "http://localhost:8080";
+	private String urlOrigin = "http://localhost:8080";
 
 	public @Data static class S3 {
 		private String accessKeyId;

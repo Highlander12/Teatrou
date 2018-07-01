@@ -25,6 +25,7 @@ import br.com.teatrou.model.Evento;
 import br.com.teatrou.model.dto.AnexoDTO;
 import br.com.teatrou.repository.EventoRepository;
 import br.com.teatrou.repository.filter.EventoFilter;
+import br.com.teatrou.repository.projection.ResumoEvento;
 import br.com.teatrou.service.EventoService;
 import br.com.teatrou.storage.S3;
 
@@ -66,7 +67,7 @@ public class EventoResource {
 	 */
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_EVENTO')")
-	public ResponseEntity<Page<Evento>> filtrar(EventoFilter eventoFilter, Pageable pageable) {
+	public ResponseEntity<Page<ResumoEvento>> filtrar(EventoFilter eventoFilter, Pageable pageable) {
 		return new ResponseEntity<>(eventoRepository.filtrar(eventoFilter, pageable), HttpStatus.OK);
 	}
 
@@ -95,6 +96,7 @@ public class EventoResource {
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_EVENTO')")
 	public ResponseEntity<Evento> buscar(@PathVariable(required = true) Long codigo) {
 		Evento evento = eventoRepository.findOne(codigo);
+		evento.setUsuario(null);
 		return evento == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(evento);
 	}
 

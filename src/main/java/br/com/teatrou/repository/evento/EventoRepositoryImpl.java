@@ -18,7 +18,9 @@ import org.springframework.util.StringUtils;
 
 import br.com.teatrou.model.Evento;
 import br.com.teatrou.model.Evento_;
+import br.com.teatrou.model.Usuario_;
 import br.com.teatrou.repository.filter.EventoFilter;
+import br.com.teatrou.repository.projection.ResumoEvento;
 
 public class EventoRepositoryImpl implements EventoRepositoryQuery {
 
@@ -26,19 +28,38 @@ public class EventoRepositoryImpl implements EventoRepositoryQuery {
 	private EntityManager manager;
 
 	@Override
-	public Page<Evento> filtrar(EventoFilter eventoFilter, Pageable pageable) {
+	public Page<ResumoEvento> filtrar(EventoFilter eventoFilter, Pageable pageable) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
-		CriteriaQuery<Evento> criteria = builder.createQuery(Evento.class);
+		CriteriaQuery<ResumoEvento> criteria = builder.createQuery(ResumoEvento.class);
 		Root<Evento> root = criteria.from(Evento.class);
-
+		resumir(builder, criteria, root);
 		Predicate[] predicates = filtrarPesquisa(eventoFilter, builder, root);
 		criteria.where(predicates);
-
-		TypedQuery<Evento> query = manager.createQuery(criteria);
+		 
+		TypedQuery<ResumoEvento> query = manager.createQuery(criteria);
 		adicionarRestricoesDePaginacao(query, pageable);
 
 		return new PageImpl<>(query.getResultList(), pageable, totalElements(eventoFilter));
 	}
+
+
+	private void resumir(CriteriaBuilder builder, CriteriaQuery<ResumoEvento> criteria, Root<Evento> root) {
+		criteria.select(builder.construct(ResumoEvento.class,
+				root.get(Evento_.codigo),
+				root.get(Evento_.usuario).get(Usuario_.nome),
+				root.get(Evento_.anexo),
+				root.get(Evento_.titulo),
+				root.get(Evento_.descricao),
+				root.get(Evento_.dataEvento),
+				root.get(Evento_.horaInicial),
+				root.get(Evento_.horaFinal),
+				root.get(Evento_.tema),
+				root.get(Evento_.endereco),
+				root.get(Evento_.quantidadeIngresso),
+				root.get(Evento_.valorIngresso),
+				root.get(Evento_.ativo)));
+	}
+
 
 	private Predicate[] filtrarPesquisa(EventoFilter eventoFilter, CriteriaBuilder builder, Root<Evento> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
@@ -64,7 +85,7 @@ public class EventoRepositoryImpl implements EventoRepositoryQuery {
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 
-	private void adicionarRestricoesDePaginacao(TypedQuery<Evento> query, Pageable pageable) {
+	private void adicionarRestricoesDePaginacao(TypedQuery<?> query, Pageable pageable) {
 		int paginaAtual = pageable.getPageNumber();
 		int totalDeRegistros = pageable.getPageSize();
 		int primeiroRegistroDaPagina = paginaAtual * totalDeRegistros;
