@@ -74,7 +74,7 @@ public class PagSeguroService {
 			// Items do carrinho
 			request.setItems(gerarItems(compraDTO, chaveUnica));
 			// URL para que o PagSeguro ira chamar;
-			request.setNotificationURL(property.getOrigin() + "/pag-seguro/notificacao");
+			request.setNotificationURL(property.getUrlOrigin() + "/pag-seguro/notificacao");
 			// URL que o PagSeguro ira redirecionar ao aprovar o pagamento
 			request.setRedirectURL(property.getOriginPermitida() + "/compra/pagamento-finalizado");
 			return request.register(getCredentials());
