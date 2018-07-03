@@ -77,6 +77,8 @@ public class CompraService {
 				StatusEnum.PENDENTE);
 		salvarIngresso(evento, compraSave, compraDTO.getIngressosMeia().intValue(), FaixaEtariaEnum.MEIA,
 				StatusEnum.PENDENTE);
+		evento.setQuantidadeIngresso(evento.getQuantidadeIngresso() - compraSave.getQuantidadeIngresso());
+		eventoRepository.save(evento);
 
 		return compra;
 	}
@@ -111,6 +113,8 @@ public class CompraService {
 		if (ingresso == null)
 			throw new IngressoInexistenteException();
 
+//		if(status== StatusEnum.CANCELADO)
+			
 		ingresso.setStatus(status);
 
 		ingressoRepository.save(ingresso);

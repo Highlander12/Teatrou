@@ -63,6 +63,7 @@ public class EventoService {
 			throw new UsuarioInexistenteOuDeslogadoException();
 		}
 		if (StringUtils.hasText(evento.getAnexo())) {
+			evento.setUrlAnexo(s3.configurarUrl(evento.getAnexo()));
 			s3.salvar(evento.getAnexo());
 		}
 

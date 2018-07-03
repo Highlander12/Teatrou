@@ -20,11 +20,12 @@ public @Data class ResumoEvento {
 	private Integer quantidadeIngresso;
 	private BigDecimal valorIngresso;
 	private Boolean ativo;
+	private String urlAnexo;
 	
 	
 	public ResumoEvento(Long codigo, String usuario, String anexo, String titulo, String descricao,
 			LocalDate dataEvento, String horaInicial, String horaFinal, String tema, String endereco,
-			Integer quantidadeIngresso, BigDecimal valorIngresso, Boolean ativo) {
+			Integer quantidadeIngresso, BigDecimal valorIngresso, Boolean ativo, String urlAnexo) {
 		this.codigo = codigo;
 		this.usuario = usuario;
 		this.anexo = anexo;
@@ -38,6 +39,7 @@ public @Data class ResumoEvento {
 		this.quantidadeIngresso = quantidadeIngresso;
 		this.valorIngresso = valorIngresso;
 		this.ativo = ativo;
+		this.urlAnexo = urlAnexo;
 	}
 	
 	

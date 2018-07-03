@@ -34,10 +34,6 @@ import lombok.NoArgsConstructor;
 @Component
 public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Evento {
 	
-	@JsonIgnore
-	@Transient
-	private static S3 s3;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
@@ -86,19 +82,6 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Eve
 	
 	@NotNull
 	private @Getter(AccessLevel.NONE) Boolean ativo;
-	
-	@Autowired
-	public void setS3(S3 s3) {
-		this.s3 = s3;
-	}
-	
-	
-	@PostLoad
-	public void postLoad() {
-		if(StringUtils.hasText(this.getAnexo())) {
-			this.urlAnexo =  s3.configurarUrl(this.anexo);
-					
-		}
-	}
+
 	
 }

@@ -1,1 +1,0 @@
-ALTER TABLE evento ADD COLUMN urlAnexo VARCHAR(255);
