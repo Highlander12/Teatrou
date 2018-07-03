@@ -16,4 +16,6 @@ public @Data class CompraFilter {
 	private LocalDate dataEventoAte;
 	
 	private Usuario usuario;
+	
+	private String situacao;
 }

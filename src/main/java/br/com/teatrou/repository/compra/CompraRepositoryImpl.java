@@ -52,6 +52,10 @@ public class CompraRepositoryImpl implements CompraRepositoryQuery {
 		if (!StringUtils.isEmpty(compraFilter.getDataEventoAte())) {
 			predicates.add(builder.lessThanOrEqualTo(root.get(Compra_.dataCompra), compraFilter.getDataEventoAte()));
 		}
+		
+		if (!StringUtils.isEmpty(compraFilter.getSituacao())) {
+			predicates.add(builder.equal(root.get(Compra_.situacao), compraFilter.getSituacao()));
+		}
 
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
