@@ -18,4 +18,6 @@ public @Data class CompraFilter {
 	private Long codigoUsuario;
 	
 	private SituacaoEnum situacao;
+	
+	private Long codigo;
 }

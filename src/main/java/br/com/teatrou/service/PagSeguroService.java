@@ -76,7 +76,7 @@ public class PagSeguroService {
 			// URL para que o PagSeguro ira chamar;
 			request.setNotificationURL(property.getUrlOrigin() + "/pag-seguro/notificacao");
 			// URL que o PagSeguro ira redirecionar ao aprovar o pagamento
-			request.setRedirectURL(property.getOriginPermitida() + "/compra/pagamento-finalizado");
+			request.setRedirectURL(property.getOriginPermitida() + "/comprar/" + chaveUnica + "/pagamento-finalizado");
 			return request.register(getCredentials());
 			
 		} catch (PagSeguroServiceException e) {

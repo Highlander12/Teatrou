@@ -2,6 +2,7 @@ package br.com.teatrou.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,6 +187,16 @@ public class CompraService {
 
 	private String gerarChaveUnica(Compra compra, Evento evento) {
 		return UUID.randomUUID().toString() + "_" + compra.getCodigo().toString() + "_" + evento.getCodigo();
+	}
+
+	public List<Ingresso> buscarIngressos(Long codigoEvento, String codigoCompra) {
+		Evento evento = eventoRepository.findOne(codigoEvento);
+		if(evento == null) throw new EventoInexistenteException();
+		Compra compra = compraRepository.findOne(codigoCompra);
+		if(compra == null) throw new CompraInexistenteException();
+		
+		
+		return ingressoRepository.findByEventoAndCompra(evento, compra);
 	}
 
 }

@@ -35,6 +35,9 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Usu
 	@NotNull
 	private String email;
 	
+	@NotNull
+	private Boolean produtor;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name="codigo_usuario"),
 	inverseJoinColumns = @JoinColumn(name="codigo_permissao"))

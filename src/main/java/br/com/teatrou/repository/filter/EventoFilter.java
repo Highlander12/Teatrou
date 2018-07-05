@@ -15,6 +15,8 @@ public @Data class EventoFilter {
 	private String tema;
 	
 	private String titulo;
+	
+	private Long codigoUsuario;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataEventoDe;
