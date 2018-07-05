@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import br.com.teatrou.model.Compra;
 import br.com.teatrou.model.Compra_;
+import br.com.teatrou.model.Usuario_;
 import br.com.teatrou.repository.filter.CompraFilter;
 
 public class CompraRepositoryImpl implements CompraRepositoryQuery {
@@ -43,8 +44,8 @@ public class CompraRepositoryImpl implements CompraRepositoryQuery {
 	private Predicate[] filtrarPesquisa(CompraFilter compraFilter, CriteriaBuilder builder, Root<Compra> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
                                                                                                  
-		if (!StringUtils.isEmpty(compraFilter.getUsuario())) {
-			predicates.add(builder.equal(root.get(Compra_.usuario), compraFilter.getUsuario()));  
+		if (!StringUtils.isEmpty(compraFilter.getCodigoUsuario())) {
+			predicates.add(builder.equal(root.get(Compra_.usuario).get(Usuario_.codigo), compraFilter.getCodigoUsuario()));  
 		}
 		if (!StringUtils.isEmpty(compraFilter.getDataEventoDe())) {
 			predicates.add(builder.greaterThanOrEqualTo(root.get(Compra_.dataCompra), compraFilter.getDataEventoDe()));

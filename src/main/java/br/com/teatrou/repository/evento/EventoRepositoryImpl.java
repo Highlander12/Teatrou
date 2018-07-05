@@ -63,6 +63,7 @@ public class EventoRepositoryImpl implements EventoRepositoryQuery {
 
 	private Predicate[] filtrarPesquisa(EventoFilter eventoFilter, CriteriaBuilder builder, Root<Evento> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
+		
 
 		if (!StringUtils.isEmpty(eventoFilter.getDescricao())) {
 			predicates.add(builder.like(builder.lower(root.get(Evento_.descricao)),
@@ -80,6 +81,9 @@ public class EventoRepositoryImpl implements EventoRepositoryQuery {
 		}
 		if (!StringUtils.isEmpty(eventoFilter.getDataEventoAte())) {
 			predicates.add(builder.lessThanOrEqualTo(root.get(Evento_.dataEvento), eventoFilter.getDataEventoAte()));
+		}
+		if (!StringUtils.isEmpty(eventoFilter.getAtivo())) {
+			predicates.add(builder.isTrue(builder.equal(root.get(Evento_.ativo), eventoFilter.getAtivo())));
 		}
 
 		return predicates.toArray(new Predicate[predicates.size()]);

@@ -63,7 +63,6 @@ public class EventoService {
 			throw new UsuarioInexistenteOuDeslogadoException();
 		}
 		if (StringUtils.hasText(evento.getAnexo())) {
-			evento.setUrlAnexo(s3.configurarUrl(evento.getAnexo()));
 			s3.salvar(evento.getAnexo());
 		}
 
@@ -78,7 +77,7 @@ public class EventoService {
 	 */
 	private void validUsuario(Evento evento) {
 		Usuario usuario = null;
-		Long codigo = authenticationHelper.getUsuario().getCodigo();
+		Long codigo = evento.getUsuario().getCodigo();
 		if (codigo != null) {
 			usuario = usuarioRepository.findOne(codigo);
 		}
@@ -183,6 +182,14 @@ public class EventoService {
 			throw new EventoInexistenteException();
 		evento.setQuantidadeIngresso(evento.getQuantidadeIngresso() + 1);
 		eventoRepository.save(evento);
+	}
+
+	public void deletar(Long codigo) {
+       Evento evento = buscaPeloCodigo(codigo);	
+       if(evento == null) 
+			throw new EventoInexistenteException();
+       evento.setAtivo(false);
+       eventoRepository.save(evento);
 	}
 	
 

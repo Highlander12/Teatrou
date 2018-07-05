@@ -111,7 +111,7 @@ public class EventoResource {
 	@DeleteMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_EXCLUIR_EVENTO')")
 	public ResponseEntity<Evento> delete(@PathVariable(required = true) Long codigo) {
-		eventoRepository.delete(codigo);
+		eventoService.deletar(codigo);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 

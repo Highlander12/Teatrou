@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import br.com.teatrou.model.Usuario;
+import br.com.teatrou.model.enums.SituacaoEnum;
 import lombok.Data;
 
 public @Data class CompraFilter {
@@ -15,7 +15,7 @@ public @Data class CompraFilter {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataEventoAte;
 	
-	private Usuario usuario;
+	private Long codigoUsuario;
 	
-	private String situacao;
+	private SituacaoEnum situacao;
 }

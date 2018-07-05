@@ -8,6 +8,8 @@ import lombok.Data;
 
 public @Data class EventoFilter {
 	
+	private Boolean ativo;
+	
 	private String descricao;
 	
 	private String tema;

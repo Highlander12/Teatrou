@@ -1,5 +1,6 @@
 package br.com.teatrou.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +27,7 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ing
 	@Id
 	private String codigo;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "codigo_evento")
 	private Evento evento;
 	

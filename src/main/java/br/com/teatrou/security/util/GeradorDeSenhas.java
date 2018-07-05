@@ -6,7 +6,7 @@ public class GeradorDeSenhas extends BCryptPasswordEncoder {
 
 	public static void main(String[] args) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		System.out.println(encoder.encode("luacheia"));
+		System.out.println(encoder.encode("dantas123"));
 	}
 
 }
