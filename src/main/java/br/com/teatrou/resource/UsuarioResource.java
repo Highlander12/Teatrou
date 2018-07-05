@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.teatrou.model.Usuario;
+import br.com.teatrou.model.dto.UsuarioDTO;
 import br.com.teatrou.repository.UsuarioRepository;
 import br.com.teatrou.service.UsuarioService;
 
@@ -38,9 +39,8 @@ public class UsuarioResource {
 	 * @return usuário criado
 	 */
 	@PostMapping
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_USUARIO')")
-	public ResponseEntity<Usuario> salvar(@Valid @RequestBody Usuario usuario) {
-		return new ResponseEntity<Usuario>(usuarioService.salvar(usuario), HttpStatus.CREATED);
+	public ResponseEntity<Usuario> salvar(@Valid @RequestBody UsuarioDTO usuario) {
+		return new ResponseEntity<Usuario>(usuarioService.validarSalvar(usuario), HttpStatus.CREATED);
 	}
 
 	

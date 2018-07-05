@@ -17,8 +17,8 @@ public class AuthenticationHelper {
 	}
 
 	public Usuario getUsuario() {
-		return ((UsuarioSistema) ((TeatrouAuthenticationToken) SecurityContextHolder.getContext().getAuthentication())
-				.getPrincipal()).getUsuario();
+		return ((TeatrouAuthenticationToken) SecurityContextHolder.getContext().getAuthentication())
+				.getUsuario();
 	}
 
 	public void setFromExt() {

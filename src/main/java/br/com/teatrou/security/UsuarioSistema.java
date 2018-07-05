@@ -3,6 +3,7 @@ package br.com.teatrou.security;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 import br.com.teatrou.model.Usuario;
@@ -16,6 +17,11 @@ public class UsuarioSistema extends User {
 	public UsuarioSistema(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {
 		super(usuario.getEmail(), usuario.getSenha(), authorities);
 		this.usuario = usuario;
+	}
+	
+	public UsuarioSistema() {
+		super(SecurityContextHolder.getContext().getAuthentication().getName(), "",
+				SecurityContextHolder.getContext().getAuthentication().getAuthorities());
 	}
 
 	public Usuario getUsuario() {
