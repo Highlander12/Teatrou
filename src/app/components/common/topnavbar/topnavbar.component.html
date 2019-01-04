@@ -1,0 +1,26 @@
+<div class="row border-bottom">
+  <nav class="navbar navbar-static-top white-nav" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <a class="navbar-brand logo-teatrou-white" href="#/eventos">
+          <img  alt="" src="assets/images/logo.png" width="120">
+      </a>
+      <a class="minimalize-styl-2 btn btn-primary " (click)="toggleNavigation()">
+        <i class="fa fa-bars"></i>
+      </a>
+      <form role="search" class="navbar-form-custom" method="post" action="#">
+        <div class="form-group" style="font-family: sans-serif, FontAwesome">
+          <!-- <input type="text" placeholder="&#xf002; Buscar eventos" class="form-control" name="top-search" id="top-search"> -->
+        </div>
+      </form>
+    </div>
+    <ul class="nav navbar-top-links navbar-right">
+      <li>
+        <a (click)="logout()">
+          <i class="fa fa-sign-out"></i> Deslogar
+        </a>
+
+      </li>
+    </ul>
+
+  </nav>
+</div>

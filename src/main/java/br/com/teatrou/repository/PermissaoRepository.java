@@ -7,6 +7,6 @@ import br.com.teatrou.model.Permissao;
 
 @Repository
 public interface PermissaoRepository extends JpaRepository<Permissao, Long> {
-	
+
 
 }

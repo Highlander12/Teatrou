@@ -12,16 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import br.com.teatrou.config.RestApiController;
 import br.com.teatrou.model.Usuario;
 import br.com.teatrou.model.dto.UsuarioDTO;
 import br.com.teatrou.repository.UsuarioRepository;
 import br.com.teatrou.service.UsuarioService;
 
-@RestController
-@RequestMapping(value = "/usuario")
+@RestApiController("usuario")
 public class UsuarioResource {
 
 	@Autowired
@@ -30,7 +28,7 @@ public class UsuarioResource {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	
+
 	/**
 	 * <p>
 	 *  Método que cria um usuário
@@ -43,7 +41,7 @@ public class UsuarioResource {
 		return new ResponseEntity<Usuario>(usuarioService.validarSalvar(usuario), HttpStatus.CREATED);
 	}
 
-	
+
 	/**
 	 * <p>
 	 *  Busca um usuário em específico
@@ -58,7 +56,7 @@ public class UsuarioResource {
 		return usuario == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(usuario);
 	}
 
-	
+
 	/**
 	 * <p>
 	 *  Atualiza um usuário
@@ -73,7 +71,7 @@ public class UsuarioResource {
 		return new ResponseEntity<>(usuarioService.atualizar(codigo, usuario), HttpStatus.OK);
 	}
 
-	
+
 	/**
 	 * <p>
 	 *  Deleta um usuário em específico

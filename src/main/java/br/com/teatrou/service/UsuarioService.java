@@ -26,7 +26,7 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	private PermissaoRepository permissaoRepository;
 
@@ -44,12 +44,12 @@ public class UsuarioService {
 
 	public Usuario validarSalvar(UsuarioDTO usuarioDTO) {
 	      Optional<Usuario> optional = usuarioRepository.findByEmail(usuarioDTO.getEmail());
-	      
-	      if(optional.isPresent()) 
+
+	      if(optional.isPresent())
 	    	  throw new EmailJaCadastradoException();
 	      if(!usuarioDTO.getConfirmacaoSenha().equals(usuarioDTO.getSenha()))
 	    	  throw new SenhaInvalidaException("Senha e confirmação não conferem");
-	      
+
 	      if(usuarioDTO.getProductor()){
 	    	  usuarioDTO.setPermissoes(Arrays.asList(
 	    			  new Permissao(Long.valueOf(1), "ROLE_CADASTRAR_EVENTO"),
@@ -64,7 +64,7 @@ public class UsuarioService {
 	    			  new Permissao(Long.valueOf(3), "ROLE_PESQUISAR_EVENTO"))
 	    			  );
 	      }
-		
+
 		 return salvar(new Usuario(null, usuarioDTO.getNome(),usuarioDTO.getSenha(), usuarioDTO.getEmail(), usuarioDTO.getProductor(), usuarioDTO.getPermissoes()));
 	}
 

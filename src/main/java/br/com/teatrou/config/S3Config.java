@@ -34,7 +34,7 @@ public class S3Config {
 				.withCredentials(new AWSStaticCredentialsProvider(credentials))
 				.withRegion(Regions.SA_EAST_1)
 				.build();
-		
+
 		if(!amazonS3.doesBucketExistV2(property.getS3().getBucket())) {
 			configurationBucket(amazonS3);
 		}
@@ -44,7 +44,7 @@ public class S3Config {
 
 	private void configurationBucket(AmazonS3 amazonS3) {
 		amazonS3.createBucket(new CreateBucketRequest(property.getS3().getBucket()));
-		
+
 		BucketLifecycleConfiguration.Rule ruleExpiration =
 				new BucketLifecycleConfiguration.Rule()
 				.withId("Regra de expiração de arquivos temporários")
@@ -52,10 +52,10 @@ public class S3Config {
 						new LifecycleTagPredicate(new Tag("temp", "true"))))
 				.withExpirationInDays(1)
 				.withStatus(BucketLifecycleConfiguration.ENABLED);
-		
+
 		BucketLifecycleConfiguration configuration = new BucketLifecycleConfiguration()
 				.withRules(ruleExpiration);
-		
+
 		amazonS3.setBucketLifecycleConfiguration(property.getS3().getBucket(),
 				configuration);
 	}

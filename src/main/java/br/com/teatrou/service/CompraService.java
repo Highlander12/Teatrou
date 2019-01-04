@@ -46,7 +46,7 @@ public class CompraService {
 	 * Método que registra a compra como pendente, reservando os ingressos até que o
 	 * pagamento seja aprovado, ou cancelado.
 	 * </p>
-	 * 
+	 *
 	 * @param compraDTO
 	 * @param chaveUnica
 	 * @return compra
@@ -88,7 +88,7 @@ public class CompraService {
 	 * <p>
 	 * Altera a situação da compra, caso o pagamento seja aprovado ou cancelado.
 	 * </p>
-	 * 
+	 *
 	 * @param codigo
 	 * @param situacaoEnum
 	 */
@@ -105,7 +105,7 @@ public class CompraService {
 	 * <p>
 	 * Altera o status do ingresso, caso o pagamento seja aprovado ou cancelado.
 	 * </p>
-	 * 
+	 *
 	 * @param codigo
 	 * @param status
 	 */
@@ -115,7 +115,7 @@ public class CompraService {
 			throw new IngressoInexistenteException();
 
 //		if(status== StatusEnum.CANCELADO)
-			
+
 		ingresso.setStatus(status);
 
 		ingressoRepository.save(ingresso);
@@ -125,7 +125,7 @@ public class CompraService {
 	 * <p>
 	 * Método que salva os ingressos relacionado a uma compra.
 	 * </p>
-	 * 
+	 *
 	 * @param evento
 	 * @param compraSave
 	 * @param quantidade
@@ -146,7 +146,7 @@ public class CompraService {
 	 * <p>
 	 * Método que pega o valor total da compra.
 	 * </p>
-	 * 
+	 *
 	 * @param compraDTO
 	 * @param evento
 	 * @return valorTotal
@@ -159,7 +159,7 @@ public class CompraService {
 	/**
 	 * <p>
 	 * Método que cria a instancia dos ingressos. </p
-	 * 
+	 *
 	 * @param compra
 	 * @param evento
 	 * @param faixaEtaria
@@ -181,7 +181,7 @@ public class CompraService {
 		Ingresso ingresso = ingressoRepository.findOne(codigo);
 		if(ingresso == null)
 			throw new IngressoInexistenteException();
-		
+
 		ingresso.setAtivo(false);
 	}
 
@@ -194,8 +194,8 @@ public class CompraService {
 		if(evento == null) throw new EventoInexistenteException();
 		Compra compra = compraRepository.findOne(codigoCompra);
 		if(compra == null) throw new CompraInexistenteException();
-		
-		
+
+
 		return ingressoRepository.findByEventoAndCompra(evento, compra);
 	}
 

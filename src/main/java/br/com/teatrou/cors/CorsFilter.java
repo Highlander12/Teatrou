@@ -28,10 +28,10 @@ public class CorsFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-           
+
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		
+
 		response.setHeader("Access-Control-Allow-Origin", property.getOriginPermitida() ); //TODO :configurar para diferentes ambientes
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		if("OPTIONS".equals(request.getMethod()) && property.getOriginPermitida().equals(request.getHeader("Origin"))){
@@ -39,7 +39,7 @@ public class CorsFilter implements Filter {
 			response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
 			response.setHeader("Access-Control-Allow-Max-Age", "3600");
 			response.setStatus(HttpServletResponse.SC_OK);
-			
+
 			}else{
 			chain.doFilter(req, resp);
 		}

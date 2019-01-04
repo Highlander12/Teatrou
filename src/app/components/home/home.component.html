@@ -1,0 +1,55 @@
+<breadcrumb [label]="'Eventos'" [filter]="true" [shopping]="true"
+(enabledFilter)="enabledFilter($event)">
+</breadcrumb>
+
+
+<div class="wrapper wrapper-content animated fadeInRight m-b-lg">
+  <div class="row" *ngIf="filters">
+    <div class="ibox">
+      <div class="col-md-12">
+        <form class="form-horizontal" #filtros="ngForm" (ngSubmit)="pesquisar()">
+          <div class="ibox-content filter-content">
+            <div class="form-body">
+              <div class="form-group">
+                <div class="col-sm-12 col-md-4">
+                  <label class="control-label">Título</label>
+                  <input type="text" class="form-control" name="titulo" [(ngModel)]="filtro.titulo" required>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <label class="control-label">Tema</label>
+                  <input type="text" class="form-control" name="tema" [(ngModel)]="filtro.tema" required>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <label class="control-label">Data Evento de</label>
+                  <p-calendar name="date" [showIcon]="true" [locale]="locale" dateFormat="dd/mm/yy" showButtonBar="true" name="dataEventoDe" [(ngModel)]="filtro.dataEventoDe"></p-calendar>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <label class="control-label">Data Evento até</label>
+                  <p-calendar name="date" [showIcon]="true" [locale]="locale" dateFormat="dd/mm/yy" showButtonBar="true"  name="dataEventoAte" [(ngModel)]="filtro.dataEventoAte"></p-calendar>
+                </div>
+                <div class="col-sm-12 col-md-2 m-t-md-x">
+                    <button class="btn btn-sm btn-primary" type="submit">
+                        <i class="fa fa-filter"></i> Filtrar
+                      </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <div class="row p-md">
+    <div class="col-lg-12">
+      <div *ngFor="let evento of eventos" class="col-md-3">
+        <card [value]="evento"></card>
+      </div>
+      <div class="loading-overlay bg-white m-b-lg" *ngIf="loading">
+        <i class="fa fa-circle-o-notch fa-spin loading-icon"></i>
+      </div>
+    </div>
+
+  </div>
+  <p-paginator [rows]="5" [totalRecords]="totalRegistros" pageLinkSize="3" (onPageChange)="aoMudarPagina($event)"></p-paginator>
+</div>

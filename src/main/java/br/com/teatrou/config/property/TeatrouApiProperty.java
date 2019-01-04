@@ -17,7 +17,7 @@ public @Data class TeatrouApiProperty {
 	public @Data static class S3 {
 		private String accessKeyId;
 		private String secretKey;
-		private String bucket = "tp-teatrou-arquivos";
+		private String bucket = "arquivos-teatrou";
 
 	}
 
@@ -25,15 +25,15 @@ public @Data class TeatrouApiProperty {
 		private boolean enableHttps;
 
 	}
-	
+
 	public @Data static class Mail {
 		private String host;
 		private Integer port;
 		private String username;
 		private String password;
-		
+
 	}
-	
+
 	public @Data static class PagSeguro {
 		private String email;
 		private String token;

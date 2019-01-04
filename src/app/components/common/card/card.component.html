@@ -1,0 +1,24 @@
+<!-- <div class="col-sm-4 col-md-3"> -->
+  <div class="ibox">
+    <div class="ibox-content product-box">
+      <!-- <div class="product-imitation">
+        [ INFO ]
+      </div> -->
+      <div class="product-imitation no-paddings ">
+          <img  class="img-responsive" src="http://arquivos-teatrou.s3.amazonaws.com/{{value.anexo}}" onError="this.src='assets/images/not-found-image.png'">
+      </div>
+      <div class="product-desc">
+        <span class="product-price">
+          {{ value.valorIngresso | currency:'BRL':true:'1.2-2' }}
+        </span>
+        <small class="text-muted">Tema: {{value.tema}}</small>
+        <a href="#" class="product-name">{{value.titulo}}</a>
+        <div class="m-t text-righ">
+          <a (click)="showDetail(value.codigo)" class="btn btn-xs btn-outline btn-primary">Ver mais
+            <i class="fa fa-long-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- </div> -->

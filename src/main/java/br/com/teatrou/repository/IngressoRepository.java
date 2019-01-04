@@ -13,7 +13,7 @@ import br.com.teatrou.model.enums.FaixaEtariaEnum;
 
 @Repository
 public interface IngressoRepository extends JpaRepository<Ingresso, String> {
-	
+
 	List<Ingresso> findByCompraAndFaixaEtaria(Compra compra, FaixaEtariaEnum faixaEtariaEnum);
 
 	List<Ingresso> findByEventoAndCompra(Evento evento, Compra compra);

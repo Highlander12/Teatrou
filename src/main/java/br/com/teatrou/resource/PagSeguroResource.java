@@ -7,17 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+import br.com.teatrou.config.RestApiController;
 import br.com.teatrou.model.dto.CompraDTO;
 import br.com.teatrou.service.PagSeguroService;
 
-@RestController
-@RequestMapping(value = "/pag-seguro")
+@RestApiController("pag-seguro")
 public class PagSeguroResource {
-	
+
 	@Autowired
 	private PagSeguroService pagSeguroService;
 
@@ -34,7 +32,7 @@ public class PagSeguroResource {
 	}
 
 	/**
-	 * <p> 
+	 * <p>
 	 *  Método que escuta as notificações das transações criadas.
 	 * </p>
 	 * @param nCode objeto padrão do PagSeguro não alterar
@@ -47,5 +45,5 @@ public class PagSeguroResource {
 			@RequestParam(value = "notificationType") String nType) {
 		return new ResponseEntity<>(pagSeguroService.verificaStatus(nCode, nType), HttpStatus.OK);
 	}
-		
+
 }

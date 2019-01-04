@@ -12,10 +12,10 @@ import br.com.teatrou.config.property.TeatrouApiProperty;
 
 @Configuration
 public class MailConfig {
-	
+
 	@Autowired
 	private TeatrouApiProperty property;
-	
+
 	@Bean
 	public JavaMailSender javaMailSender() {
 		Properties properties = new Properties();
@@ -23,17 +23,17 @@ public class MailConfig {
 		properties.put("mail.smtp.auth", true);
 		properties.put("mail.smtp.starttls.enable", true);
 		properties.put("mail.smtp.connectiontimeout", 10000);
-		
-		
+
+
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setJavaMailProperties(properties); 
+		mailSender.setJavaMailProperties(properties);
 		mailSender.setHost(property.getMail().getHost());
 		mailSender.setPort(property.getMail().getPort());
 		mailSender.setUsername(property.getMail().getUsername());
 		mailSender.setPassword(property.getMail().getPassword());
-		
+
 		return mailSender;
-		
+
 	}
 
 }

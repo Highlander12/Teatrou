@@ -31,7 +31,7 @@ public class TeatrouExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Autowired
 	private MessageSource messageSource;
-    
+
 	//Tratativa de Erro Buscando Itens com falsas Requisições
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -51,48 +51,48 @@ public class TeatrouExceptionHandler extends ResponseEntityExceptionHandler {
 		List<Erro> erros = criarListaDeErros(ex.getBindingResult());
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	@ExceptionHandler({DataIntegrityViolationException.class})
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request){
 		String mensagemUsuario = messageSource.getMessage("operacao.nao-permitida", null, LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = ex.getRootCause().getMessage().toString();
-		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));	
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	//Tratativa de Erro DeleteMapping
 	@ExceptionHandler({EmptyResultDataAccessException.class})
 	public ResponseEntity<Object> handleEmptyResultDataAcessException(EmptyResultDataAccessException ex,
 			WebRequest request){
 		String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = ex.toString();
-		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));		
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
-	
+
 	@ExceptionHandler({UsuarioInexistenteOuDeslogadoException.class})
-	public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(UsuarioInexistenteOuDeslogadoException ex, 
+	public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(UsuarioInexistenteOuDeslogadoException ex,
 			WebRequest request){
 		String mensagemUsuario = messageSource.getMessage("usuario.deslogado-ou-inexistente", null, LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-		
+
 	}
-	
+
 	public List<Erro> criarListaDeErros(BindingResult bindingResult){
 		List<Erro> erros = new ArrayList<>();
-		
+
 		for (FieldError fieldError : bindingResult.getFieldErrors()) {
 			String mensagemUsuario = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
 			String mensagemDesenvolvedor = fieldError.toString();
 			erros.add(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		}
-		
+
 		return erros;
 	}
-    
-	
+
+
 	//Concatenando as mensagens de Erro
 	public static class Erro {
 		private String mensagemUsuario;

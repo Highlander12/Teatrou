@@ -1,0 +1,85 @@
+<breadcrumb [label]="'Detalhamento'" [shopping]="true"></breadcrumb>
+
+<div class="ibox m-t-lg">
+  <div class="ibox-content bd-n">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="ng-isolate-scope slick-initialized slick-slider">
+          <div aria-live="polite" class="slick-list draggable">
+            <div class="slick-track" role="listbox" style="opacity: 1; width: 400px; margin-left: 30px;">
+              <div class="slick-slide slick-cloned" data-slick-index="-1" aria-hidden="true" tabindex="-1" style="width: 450px;">
+                <div class="image-imitation p-image-form ">
+                  <img class="img-responsive" src="http:{{evento.urlAnexo}}" onError="this.src='assets/images/not-found-image.png'">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <h2 class="font-bold m-b-xs">
+          {{evento.titulo}}
+        </h2>
+        <div class="m-t-md">
+          <h2 class="product-main-price">{{ evento.valorIngresso | currency:'BRL':true:'1.2-2' }}
+          </h2>
+        </div>
+        <hr>
+        <h4>Descrição</h4>
+        <div class="small text-muted">
+          <span [innerHTML]="evento.descricao"></span>
+        </div>
+        <dl class="small m-t-sm">
+          <dt>Data do evento</dt>
+          <dd>
+            <i class="fa fa-calendar"></i>{{ evento.dataEvento  | date: 'dd/MM/yyyy'}}</dd>
+          <dt>Inicia as</dt>
+          <dd>
+            <i class="fa fa-hourglass-start"></i> {{ evento.horaInicial }}</dd>
+          <dt>Termina as</dt>
+          <dd>
+            <i class="fa fa-hourglass-end"></i> {{evento.horaFinal}}</dd>
+          <dt>Endereço</dt>
+          <dd>{{evento.endereco}}</dd>
+        </dl>
+        <hr>
+
+        <div>
+          <div class="btn-group">
+            <button class="btn btn-primary btn-sm" *ngIf="!auth.temPermissao('ROLE_ALTERAR_EVENTO')" (click)="comprar()">
+              <i class="fa fa-cart-plus"></i> Comprar</button>
+            <button class="btn btn-primary btn-sm" *ngIf="auth.temPermissao('ROLE_ALTERAR_EVENTO')" (click)="editar()">
+              <i class="fa fa-edit"></i> Editar</button>
+            <button class="btn btn-danger btn-sm" *ngIf="auth.temPermissao('ROLE_EXCLUIR_EVENTO')" (click)="confirmacaoExcluir($event)">
+              <i class="fa fa-remove"></i> Remover </button>
+            <button class="btn btn-white btn-sm" (click)="voltar()">
+              <i class="fa fa-mail-reply"></i> Voltar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #eventModal="bs-modal"  class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class=" pull-left">Excluir Evento</h3>
+      </div>
+      <div class="modal-body">
+         <small>Deseja realmente excluir este evento?</small>
+      </div>
+      <div class="modal-footer">
+        <div class="ui-dialog-buttonpane ui-helper-clearfix form-buttons">
+          <button class="btn btn-danger btn-sm" (click)="eventModal.hide()">
+              <i class="fa fa-times"></i> Não</button>
+            <button class="btn btn-primary btn-sm" (click)="excluir()">
+                <i class="fa fa-check"></i> Sim</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

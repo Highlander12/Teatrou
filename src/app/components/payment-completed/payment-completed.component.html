@@ -1,0 +1,47 @@
+<breadcrumb [label]="'Pagamento Aprovado'" class="notPrint"></breadcrumb>
+
+<div class="loading-overlay bg-white m-b-lg" *ngIf="loading">
+  <i class="fa fa-circle-o-notch fa-spin loading-icon"></i>
+</div>
+
+<div class="row">
+  <div class="col-md-12 " *ngFor="let ingresso of ingressos">
+
+    <div class="ibox">
+      <div class="ibox-content m-t-lg no-borders m-l-md">
+
+        <div class="col-md-1">
+          <img src="https://chart.googleapis.com/chart?cht=qr&chl=${{ingresso.codigo}}&chs=160x160&chld=L|0" class="qr-code-md ">
+        </div>
+        <div class="col-md-4">
+          <label class="control-label">Título</label>
+          <h2>{{ingresso?.evento?.titulo}}</h2>
+        </div>
+        <div class="col-md-2">
+          <label class="control-label">Data </label>
+          <h2>{{ingresso?.evento?.dataEvento | date: 'dd/MM/yyyy'}}</h2>
+        </div>
+        <div class="col-md-2">
+          <label class="control-label">Nome</label>
+          <h2>{{ingresso?.evento?.usuario?.nome}}</h2>
+        </div>
+        <div class="col-md-2">
+          <label class="control-label">Faixa Etaria</label>
+          <h2>{{ingresso.faixaEtaria}}</h2>
+        </div>
+        <div class="col-md-12">
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 notPrint">
+    <div class="ibox">
+      <div class="ibox-content m-t-lg no-borders m-l-md">
+        <button class="btn btn-info btn-lg" (click)="imprimir()">
+          <i class="fa fa-file-pdf-o"></i> Imprimir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

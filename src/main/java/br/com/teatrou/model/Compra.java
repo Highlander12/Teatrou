@@ -22,25 +22,25 @@ import lombok.NoArgsConstructor;
 @Table(name = "compra")
 public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class  Compra {
 
-	
+
 	@Id
 	private String codigo;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_usuario")
 	private Usuario usuario;
-	
+
 	@Column(name = "quantidade_ingresso")
 	private Integer quantidadeIngresso;
-	
+
 	@Column(name = "data_compra")
 	private LocalDate dataCompra;
-	
+
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "situacao")
 	private SituacaoEnum situacao;
-		
+
 }
