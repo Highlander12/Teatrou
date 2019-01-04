@@ -15,8 +15,8 @@ import br.com.teatrou.repository.evento.EventoRepositoryQuery;
 public interface EventoRepository extends JpaRepository<Evento, Long>, EventoRepositoryQuery {
 
 	Page<Evento> findAll(Pageable pageable);
-	
+
 	Evento findByUsuario(Usuario usuario);
-	
+
 
 }

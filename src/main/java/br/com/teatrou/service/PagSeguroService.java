@@ -43,26 +43,26 @@ public class PagSeguroService {
 
 	@Autowired
 	private CompraService compraService;
-	
+
 	@Autowired
 	private EventoService eventoService;
 
 	@Autowired
 	private IngressoRepository ingressoRepository;
 
-	
+
 	/**
 	 * <p> Método responsável pela criação do link de pagamento, envio dos ingressos para o PagSeguro
 	 * e criação da compra com o status pendente e dos ingressos.
 	 * </p>
-	 * 
+	 *
 	 * @param compraDTO objeto que representa a compra, onde o possui o codigo do evento e a quantidade
-	 * de ingresso, pois o usuario e pego pela classe {@link AuthenticationHelper } deis que ele esteja 
+	 * de ingresso, pois o usuario e pego pela classe {@link AuthenticationHelper } deis que ele esteja
 	 * logado e o projeto esteja no perfil de Produção.
 	 * @return link para pagamento
 	 */
 	public String criarPagamento(CompraDTO compraDTO) {
-		
+
 		try {
 			String chaveUnica = gerarIdUnico(compraDTO);
 			PaymentRequest request = new PaymentRequest();
@@ -78,9 +78,9 @@ public class PagSeguroService {
 			// URL que o PagSeguro ira redirecionar ao aprovar o pagamento
 			request.setRedirectURL(property.getOriginPermitida() + "/"+ compraDTO.getCodigoEvento()  + "/comprar/" + chaveUnica + "/pagamento-finalizado");
 			return request.register(getCredentials());
-			
+
 		} catch (PagSeguroServiceException e) {
-			
+
 			Logger.getLogger(PagSeguroService.class.getName()).log(Level.SEVERE, null, e);
 			return e.getMessage();
 		}
@@ -96,9 +96,9 @@ public class PagSeguroService {
 	 * @return status da compra
 	 */
 	public String verificaStatus(String nCode, String nType) {
-		
+
 		try {
-			// Pega a transação de pagamento 
+			// Pega a transação de pagamento
 			Transaction transaction = NotificationService.checkTransaction(getCredentials(), nCode);
 
 			// Status Aguardando Pagamento
@@ -113,71 +113,71 @@ public class PagSeguroService {
 			else if (TransactionStatus.CANCELLED.equals(transaction.getStatus())) {
 				registrarStatus(transaction, SituacaoEnum.PAGAMENTO_CANCELADO);
 			}
-			
+
 			return String.valueOf(transaction.getStatus());
-			
+
 		} catch (PagSeguroServiceException e) {
-			
+
 			Logger.getLogger(PagSeguroService.class.getName()).log(Level.SEVERE, null, e);
 			return e.getMessage();
 		}
 	}
 
-	
+
 	/**
 	 * <p> Método que altera os status da compra e do ingresso de fato, e caso o pagamento seja cancelado
-	 * retoma a quantidade de ingressos para o Evento, deixando disponivel novamente a quantidade, que antes 
+	 * retoma a quantidade de ingressos para o Evento, deixando disponivel novamente a quantidade, que antes
 	 * estava no carinho.
 	 * </p>
-	 * 
+	 *
 	 * @param transaction transação de pagamento
 	 * @param situacao da compra
 	 */
 	private void registrarStatus(Transaction transaction, SituacaoEnum situacao) {
 		// Muda o status da compra
 		compraService.alteraCompra(transaction.getReference(), situacao);
-		
+
 		// Pega todos itens, no caso os ingressos
 		List<Item> items = transaction.getItems();
-		
+
 		// Muda o status dos ingressos
 		if(SituacaoEnum.PAGAMENTO_APROVADO.equals(situacao)) {
 			items.forEach(ingresso -> {
 				compraService.alteraIngresso(ingresso.getId(), StatusEnum.APROVADO);
 			});
-		} 
+		}
 		else if (SituacaoEnum.PAGAMENTO_CANCELADO.equals(situacao)) {
 			items.forEach(ingresso -> {
 				compraService.alteraIngresso(ingresso.getId(), StatusEnum.CANCELADO);
 				eventoService.retomaIngresso(ingresso.getId());
 			});
-			
+
 		}
 	}
 
-	
+
 	/**
 	 * <p> Método que gera a compra pendente, no sistema representando pelo método {@link registrarCompraPendente}
 	 * do service de compra, e transforma os ingressos em objetos padrões do PagSeguro, representado pela classe
 	 * {@link Item}.
 	 * </p>
-	 * 
+	 *
 	 * @param compraDTO objeto que representa a compra, onde o possui o codigo do evento e a quantidade
-	 * de ingresso, pois o usuario e pego pela classe {@link AuthenticationHelper } deis que ele esteja 
+	 * de ingresso, pois o usuario e pego pela classe {@link AuthenticationHelper } deis que ele esteja
 	 * logado e o projeto esteja no perfil de Produção.
-	 * @param chave id unico 
+	 * @param chave id unico
 	 * @return ingressos no formato padrão do PagSeguro
 	 */
 	private List<Item> gerarItems(CompraDTO compraDTO, String chave) {
-		
+
 		// Registro da compra e ingressos
 		Compra compra = compraService.registrarCompraPendente(compraDTO, chave);
-		
+
 		List<Ingresso> ingressosInteira = ingressoRepository.findByCompraAndFaixaEtaria(compra, FaixaEtariaEnum.INTEIRA);
 		List<Ingresso> ingressosMeia = ingressoRepository.findByCompraAndFaixaEtaria(compra, FaixaEtariaEnum.MEIA);
 
 		List<Item> items = new ArrayList<Item>();
-        
+
 		// Adicionando os items/ingressos
 		ingressosInteira.forEach(ingressoInteira -> items.add(criarItem(ingressoInteira)));
 		ingressosMeia.forEach(ingressoMeia -> items.add(criarItem(ingressoMeia)));
@@ -185,7 +185,7 @@ public class PagSeguroService {
 		return items;
 	}
 
-	/** 
+	/**
 	 * <p>
 	 *   Método que cria um item baseado no ingresso.
 	 * </p>
@@ -203,7 +203,7 @@ public class PagSeguroService {
 		} else {
 			item.setAmount(ingresso.getEvento().getValorIngresso());
 		}
-		
+
 		return item;
 	}
 
@@ -211,7 +211,7 @@ public class PagSeguroService {
 	 * <p>
 	 *   Método que cria o comprador da transação
 	 * </p>
-	 * @param compraDTO 
+	 * @param compraDTO
 	 * @return comprador
 	 */
 	private Sender getSender(CompraDTO compraDTO) {
@@ -221,9 +221,9 @@ public class PagSeguroService {
 		return new Sender(usuario.getNome(),usuario.getEmail());
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * @param compraDTO
 	 * @return Id unico
 	 */
@@ -231,9 +231,9 @@ public class PagSeguroService {
 		return UUID.randomUUID().toString() + "_" + compraDTO.getCodigoEvento();
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * @return credentiais do Vendedor
 	 * @throws PagSeguroServiceException
 	 */
@@ -241,5 +241,5 @@ public class PagSeguroService {
 		return new AccountCredentials(property.getPagSeguro().getEmail(), property.getPagSeguro().getToken());
 	}
 
-	
+
 }

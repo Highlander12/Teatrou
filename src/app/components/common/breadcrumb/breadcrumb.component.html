@@ -1,0 +1,26 @@
+<div class="gray-bg">
+  <div class="p-sm">
+    <div class="row ">
+      <div class="col-lg-12">
+        <div class="text-left m-t-sm-n m-l">
+          <h2>
+            <strong>
+              {{ label }}
+            </strong>
+          </h2>
+          <div class="pull-right m-t-sm-n filter-divider">
+            <button class="btn btn-sm btn-primary" *ngIf="getButtonNew()" (click)="novo()">
+              <i class="fa fa-plus"></i> Novo
+            </button>
+            <button class="btn btn-sm btn-primary"  *ngIf="getShopping()" (click)="minhasCompras()">
+              <i class="fa fa-shopping-cart"></i> Minhas compras
+            </button>
+            <button class="btn btn-sm btn-outline btn-primary" (click)="filterOn()" *ngIf="filter === true">
+              <i class="fa fa-gears"></i> {{ value === false ? "Ver filtros" : "Esconder Filtros" }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

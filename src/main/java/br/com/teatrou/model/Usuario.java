@@ -21,28 +21,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "usuario")
 public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Usuario {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
-	
+
 	@NotNull
 	private String nome;
-	
+
 	@NotNull
 	private String senha;
-	
+
 	@NotNull
 	private String email;
-	
+
 	@NotNull
 	private Boolean produtor;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name="codigo_usuario"),
 	inverseJoinColumns = @JoinColumn(name="codigo_permissao"))
 	List<Permissao> permissoes;
-	
-	
-	
+
+
+
 }

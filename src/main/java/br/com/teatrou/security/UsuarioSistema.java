@@ -18,7 +18,7 @@ public class UsuarioSistema extends User {
 		super(usuario.getEmail(), usuario.getSenha(), authorities);
 		this.usuario = usuario;
 	}
-	
+
 	public UsuarioSistema() {
 		super(SecurityContextHolder.getContext().getAuthentication().getName(), "",
 				SecurityContextHolder.getContext().getAuthentication().getAuthorities());

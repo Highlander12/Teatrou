@@ -37,7 +37,7 @@ public class TeatrouAuthenticationToken extends AbstractAuthenticationToken {
 	public Object getPrincipal() {
 		return principal;
 	}
-	
+
 	public Usuario getUsuario() {
 		return ((UsuarioSistema) principal).getUsuario();
 	}

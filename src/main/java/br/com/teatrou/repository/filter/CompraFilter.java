@@ -8,16 +8,16 @@ import br.com.teatrou.model.enums.SituacaoEnum;
 import lombok.Data;
 
 public @Data class CompraFilter {
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataEventoDe;
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataEventoAte;
-	
+
 	private Long codigoUsuario;
-	
+
 	private SituacaoEnum situacao;
-	
+
 	private Long codigo;
 }

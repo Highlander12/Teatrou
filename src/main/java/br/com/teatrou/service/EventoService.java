@@ -34,7 +34,7 @@ public class EventoService {
 	@Autowired
 	private AuthenticationHelper authenticationHelper;
 
-	
+
 	/**
 	 * <p>
 	 *  Método que lista todos eventos
@@ -45,10 +45,10 @@ public class EventoService {
 	public Page<Evento> listar(Pageable pageable) {
 		return eventoRepository.findAll(pageable);
 	}
-	
-	/** 
+
+	/**
 	 * <p>
-	 * Método que salva um evento, e remove a regra de exclusão do anexo na amazon caso o anexo no {@link evento } 
+	 * Método que salva um evento, e remove a regra de exclusão do anexo na amazon caso o anexo no {@link evento }
 	 * passado na assinatura o método seja valido.
 	 * </p>
 	 * @param evento
@@ -58,7 +58,7 @@ public class EventoService {
 
 		Long codUsuario = evento.getUsuario().getCodigo();
 		Usuario usuario = usuarioRepository.findByCodigo(codUsuario);
-		
+
 		if (usuario == null) {
 			throw new UsuarioInexistenteOuDeslogadoException();
 		}
@@ -69,7 +69,7 @@ public class EventoService {
 		return eventoRepository.save(evento);
 	}
 
-	/** 
+	/**
 	 * <p>
 	 * Método que valida se o usuário esta deslogado ou e inexistente
 	 * </p>
@@ -102,10 +102,10 @@ public class EventoService {
 		if (StringUtils.isEmpty(evento.getAnexo()) &&
 			StringUtils.hasText(eventoSalvo.getAnexo())) {
 			s3.remover(eventoSalvo.getAnexo());
-		} 
+		}
 		else if (StringUtils.hasText(evento.getAnexo()) &&
 				    !evento.getAnexo().equals(eventoSalvo.getAnexo())) {
-			
+
 			s3.substituir(eventoSalvo.getAnexo(), evento.getAnexo());
 		}
 
@@ -113,9 +113,9 @@ public class EventoService {
 		return salvar(eventoSalvo);
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * @param codigo
 	 * @return evento específico
 	 */
@@ -127,7 +127,7 @@ public class EventoService {
 		return eventoSalvo;
 	}
 
-	
+
 	/**
 	 * <p>
 	 * Método que atualiza a data de um evento
@@ -178,20 +178,20 @@ public class EventoService {
 	 */
 	public void retomaIngresso(String codigo) {
 		Evento evento = buscaPeloCodigo(Long.parseLong(codigo));
-		if(evento == null) 
+		if(evento == null)
 			throw new EventoInexistenteException();
 		evento.setQuantidadeIngresso(evento.getQuantidadeIngresso() + 1);
 		eventoRepository.save(evento);
 	}
 
 	public void deletar(Long codigo) {
-       Evento evento = buscaPeloCodigo(codigo);	
-       if(evento == null) 
+       Evento evento = buscaPeloCodigo(codigo);
+       if(evento == null)
 			throw new EventoInexistenteException();
        evento.setAtivo(false);
        eventoRepository.save(evento);
 	}
-	
+
 
 
 }

@@ -24,7 +24,7 @@ import br.com.teatrou.config.property.TeatrouApiProperty;
 public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2AccessToken>{
 
 	public static final String POST_ACCESS_TOKEN = "postAccessToken";
-	
+
 	@Autowired
 	private TeatrouApiProperty property;
 
@@ -56,7 +56,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 	private void cookieAddRefreshToken(String refreshToken, HttpServletRequest request,
 			HttpServletResponse response) {
 		Cookie requestTokenCookie = new Cookie("RefreshToken", refreshToken);
-		
+
 		requestTokenCookie.setHttpOnly(true);
 		requestTokenCookie.setSecure(property.getSeguranca().isEnableHttps());
 		requestTokenCookie.setPath(request.getContextPath() + "/oauth/token");

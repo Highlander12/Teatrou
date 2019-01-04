@@ -14,4 +14,5 @@ public class TeatrouApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TeatrouApplication.class, args);
 	}
+
 }

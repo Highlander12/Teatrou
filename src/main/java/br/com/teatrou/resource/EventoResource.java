@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.teatrou.config.RestApiController;
 import br.com.teatrou.model.Evento;
 import br.com.teatrou.model.dto.AnexoDTO;
 import br.com.teatrou.repository.EventoRepository;
@@ -29,8 +28,7 @@ import br.com.teatrou.repository.projection.ResumoEvento;
 import br.com.teatrou.service.EventoService;
 import br.com.teatrou.storage.S3;
 
-@RestController
-@RequestMapping(value = "/evento")
+@RestApiController("evento")
 public class EventoResource {
 
 	@Autowired
@@ -38,11 +36,11 @@ public class EventoResource {
 
 	@Autowired
 	private EventoRepository eventoRepository;
-	
+
 	@Autowired
 	private S3 s3;
 
-	
+
 	/**
 	 * <p>
 	 * Método utilizado para upload de uma foto de apresentação de um Evento.
@@ -56,7 +54,7 @@ public class EventoResource {
 		String nome =  s3.salvarTemporariamente(arquivo);
 		return new AnexoDTO(nome, s3.configurarUrl(nome));
 	}
-	
+
 	/**
 	 * <p>
 	 *  Método que filtra os eventos, pelo tema, titulo, descrição e período;
@@ -71,7 +69,7 @@ public class EventoResource {
 		return new ResponseEntity<>(eventoRepository.filtrar(eventoFilter, pageable), HttpStatus.OK);
 	}
 
-	
+
 	/**
 	 * <p>
 	 * Método que cria um Evento.
@@ -104,7 +102,7 @@ public class EventoResource {
 	 * <p>
 	 *   Deleta um Evento em específico
 	 * </p>
-	 * 
+	 *
 	 * @param codigo
 	 * @return
 	 */
@@ -115,7 +113,7 @@ public class EventoResource {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	
+
 	/**
 	 * <p>
 	 *  Atualiza um Evento
@@ -131,7 +129,7 @@ public class EventoResource {
 		return new ResponseEntity<>(eventoService.atualizar(codigo, evento), HttpStatus.OK);
 	}
 
-	
+
 	/**
 	 * <p>
 	 *   Atualiza a data do Evento
@@ -146,7 +144,7 @@ public class EventoResource {
 			@RequestBody LocalDate dataEvento) {
 		return new ResponseEntity<>(eventoService.atualizarDataEvento(codigo, dataEvento), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * <p>
 	 *   Ativa um Evento
@@ -161,7 +159,7 @@ public class EventoResource {
 		return new ResponseEntity<>(eventoService.ativarEvento(codigo), HttpStatus.OK);
 	}
 
-	
+
 	/**
 	 * <p>
 	 *   Atualiza a descrição de um evento

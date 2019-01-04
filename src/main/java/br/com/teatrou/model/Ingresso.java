@@ -30,7 +30,7 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ing
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "codigo_evento")
 	private Evento evento;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_compra")
 	private Compra compra;
@@ -38,14 +38,14 @@ public @Data @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor class Ing
 	@Enumerated(EnumType.STRING)
 	@Column(name = "faixa_etaria")
 	private FaixaEtariaEnum faixaEtaria;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status")
 	private StatusEnum status;
 
 	@NotNull
 	private @Getter(AccessLevel.NONE) Boolean ativo;
-	
-	
+
+
 
 }

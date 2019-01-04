@@ -7,15 +7,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 public @Data class EventoFilter {
-	
+
 	private Boolean ativo;
-	
+
 	private String descricao;
-	
+
 	private String tema;
-	
+
 	private String titulo;
-	
+
 	private Long codigoUsuario;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

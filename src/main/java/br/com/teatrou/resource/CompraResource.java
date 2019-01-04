@@ -10,22 +10,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import br.com.teatrou.config.RestApiController;
 import br.com.teatrou.model.Compra;
 import br.com.teatrou.model.Ingresso;
 import br.com.teatrou.repository.CompraRepository;
 import br.com.teatrou.repository.filter.CompraFilter;
 import br.com.teatrou.service.CompraService;
 
-@RestController
-@RequestMapping(value = "/compras")
+@RestApiController("compras")
 public class CompraResource {
-	
+
 	@Autowired
 	private CompraRepository compraRepository;
-	
+
 	@Autowired
 	private CompraService compraService;
 
@@ -44,8 +42,8 @@ public class CompraResource {
 	/**
 	 * <p>
 	 * Método que busca os ingressos de uma compra
-	 * @param compraFilter
-	 * @param pageable
+	 * @param codigoEvento
+	 * @param codigoCompra
 	 * @return compras.
 	 */
 	@GetMapping("/{codigoEvento}/{codigoCompra}")

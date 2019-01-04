@@ -7,7 +7,7 @@ import br.com.teatrou.model.Compra;
 import br.com.teatrou.repository.filter.CompraFilter;
 
 public interface CompraRepositoryQuery {
-	
+
 	public Page<Compra> filtrar(CompraFilter compraFilter, Pageable pageable);
 
 }

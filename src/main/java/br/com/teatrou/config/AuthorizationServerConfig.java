@@ -24,10 +24,10 @@ import br.com.teatrou.config.token.CustomTokenEnhancer;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
@@ -45,19 +45,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		      .accessTokenValiditySeconds(40)
 		      .refreshTokenValiditySeconds(3600*24);
 	}
-	
+
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
 		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
-		
+
 		endpoints
 		      .tokenStore(tokenStore())
 		      .tokenEnhancer(tokenEnhancerChain)
 		      .reuseRefreshTokens(false)
 		      .authenticationManager(authenticationManager);
 	}
-    
+
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter acessTokenConverter = new JwtAccessTokenConverter();
@@ -69,7 +69,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public TokenStore tokenStore() {
 		return new JwtTokenStore(accessTokenConverter());
 	}
-    
+
 	@Bean
 	public TokenEnhancer tokenEnhancer() {
 	    return new CustomTokenEnhancer();

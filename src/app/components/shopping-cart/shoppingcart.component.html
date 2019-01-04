@@ -1,0 +1,57 @@
+<breadcrumb [label]="'Minhas compras'">
+</breadcrumb>
+
+
+<div class="row">
+  <div class="ibox">
+    <div class="col-md-12">
+      <form class="form-horizontal" #minhasCompras="ngForm" (ngSubmit)="pesquisar()">
+        <div class="ibox-content">
+          <div class="form-body">
+            <div class="form-group">
+              <div class="col-md-2"></div>
+              <div class="col-sm-12 col-md-2">
+                <label class="control-label">Data de</label>
+                <p-calendar name="dataCompraDe" [showIcon]="true" [locale]="locale" showButtonBar="true" dateFormat="dd/mm/yy" [(ngModel)]="filtro.dataCompraDe"></p-calendar>
+              </div>
+              <div class="col-sm-12 col-md-2">
+                <label class="control-label">Data até</label>
+                <p-calendar name="dataCompraAte" [showIcon]="true" [locale]="locale" showButtonBar="true" dateFormat="dd/mm/yy" [(ngModel)]="filtro.dataCompraAte"></p-calendar>
+              </div>
+              <div class="col-sm-12 col-md-2">
+                <label class="control-label">Situação</label>
+                <p-dropdown [options]="situacao" placeholder="Todas" [style]="{'width':'180px'}" name="situacao" [(ngModel)]="filtro.situacao"></p-dropdown>
+              </div>
+              <div class="col-sm-12 col-md-2 m-t-md-x">
+                <button class="btn btn-primary btn-sm" type="submit">
+                  <i class="fa fa-filter"></i> Filtrar
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- <hr> -->
+        </div>
+      </form>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="ibox">
+
+        <div class="ibox-content">
+          <p-dataTable #dt [value]="compras" styleClass="striped-table" [lazy]="true" (onLazyLoad)="aoMudarPagina($event)" [paginator]="true"
+            [rows]="6" [totalRecords]="totalRegistros" [responsive]="true" emptyMessage="Não há historico de compras." [loading]="loading">
+            <p-column field="codigo" header="QRCode" styleClass="col-center-80">
+              <ng-template let-codigo="rowData['codigo']" pTemplate="body">
+                <img src="https://chart.googleapis.com/chart?cht=qr&chl=${{codigo}}&chs=160x160&chld=L|0" class="qr-code ">
+              </ng-template>
+            </p-column>
+            <p-column field="dataCompra" header="Data da Compra" styleClass="col-center-100"></p-column>
+            <p-column field="valorTotal" header="Valor Total" styleClass="col-center-100"></p-column>
+            <p-column field="quantidadeIngresso" header="Quantidade Ingresso" styleClass="col-center-100"></p-column>
+            <p-column field="situacao" header="Situação" styleClass="col-center-100 bold"></p-column>
+          </p-dataTable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
