@@ -223,6 +223,7 @@
 			
 
 		</plugins>
+		<finalName>teatrou</finalName>
 	</build>
 
 
